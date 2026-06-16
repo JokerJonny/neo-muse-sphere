@@ -31,7 +31,7 @@ Forged from 1900+ songs, 100+ albums, hundreds of surreal visuals, and a persona
 
 ---
 
-**🌐 Live App:** [Launch neoUNIVERSE](https://your-lovable-app-url-here)  
+**🌐 Live App:** [Launch neoUNIVERSE]([https://your-lovable-app-url-here](https://universe.neo-shade.com/))  
 **🏠 Main Website:** [neo-shade.com](https://neo-shade.com)
 
 ---
