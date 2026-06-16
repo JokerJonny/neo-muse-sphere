@@ -420,47 +420,10 @@ export const syncYouTube = createServerFn({ method: "POST" })
       }
     }
 
-    // Sync playlists + items.
+    // Sync playlists + items (releases).
     let playlistCount = 0;
     try {
-      const playlists = await fetchPlaylists(apiKey, channelId);
-      for (let i = 0; i < playlists.length; i++) {
-        const pl = playlists[i];
-        const { data: row, error: plErr } = await supabaseAdmin
-          .from("youtube_playlists")
-          .upsert(
-            {
-              youtube_playlist_id: pl.playlistId,
-              title: pl.title,
-              description: pl.description,
-              artwork_url: pl.thumbnail,
-              item_count: pl.items.length,
-              published_at: pl.publishedAt,
-              sort_order: i,
-              is_published: true,
-            },
-            { onConflict: "youtube_playlist_id" },
-          )
-          .select("id")
-          .single();
-        if (plErr) throw new Error(plErr.message);
-
-        await supabaseAdmin.from("youtube_playlist_items").delete().eq("playlist_id", row.id);
-        if (pl.items.length) {
-          const itemRows = pl.items.map((it) => ({
-            playlist_id: row.id,
-            youtube_id: it.videoId,
-            position: it.position,
-            title: it.title,
-            artwork_url: it.thumbnail,
-          }));
-          const { error: itErr } = await supabaseAdmin
-            .from("youtube_playlist_items")
-            .insert(itemRows);
-          if (itErr) throw new Error(itErr.message);
-        }
-        playlistCount += 1;
-      }
+      playlistCount = await syncPlaylistsToDb(apiKey, channelId, supabaseAdmin);
     } catch (e) {
       // Playlists are non-critical; surface but don't fail the whole sync.
       console.error("Playlist sync failed:", e);
@@ -475,4 +438,25 @@ export const syncYouTube = createServerFn({ method: "POST" })
       videos: videos.length - shorts,
       playlists: playlistCount,
     };
+  });
+
+/** Focused sync that only refreshes the Releases tab (album/release playlists). */
+export const syncReleases = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden: admin access required.");
+
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    if (!apiKey) {
+      throw new Error("YouTube sync is not configured. Add a YOUTUBE_API_KEY secret.");
+    }
+
+    const { channelId } = await resolveChannel(apiKey);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const playlists = await syncPlaylistsToDb(apiKey, channelId, supabaseAdmin);
+    return { playlists };
   });
