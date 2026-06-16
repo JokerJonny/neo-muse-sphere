@@ -30,7 +30,7 @@ async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track
 
   const { data, error } = await q;
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchTracks(opts?: {
@@ -55,7 +55,7 @@ export async function fetchTracks(opts?: {
 
   const { data, error } = await q;
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 /** Fetch the entire published catalog (title + description + metadata) for
