@@ -82,14 +82,46 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "neoSHADE — Music, Video & Lore from the neon dark" },
+      {
+        name: "description",
+        content:
+          "Official hub for neoSHADE: stream surreal cyberpunk music, watch cinematic videos, discover tracks by vibe, and own MP3 downloads for $0.50.",
+      },
+      { name: "author", content: "neoSHADE" },
+      { property: "og:site_name", content: "neoUNIVERSE" },
+      { property: "og:title", content: "neoSHADE · neoUNIVERSE" },
+      {
+        property: "og:description",
+        content:
+          "Surreal cyberpunk music & cinematic videos from neoSHADE — stream, discover by vibe, and own tracks for $0.50.",
+      },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "neoSHADE · neoUNIVERSE" },
+      {
+        name: "twitter:description",
+        content: "Surreal cyberpunk music & cinematic videos from neoSHADE.",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "MusicGroup",
+          name: "neoSHADE",
+          alternateName: "NeoShade-AI",
+          url: "https://universe.neo-shade.com",
+          genre: ["Cyberpunk", "Synthwave", "Cinematic", "Electronic"],
+          description:
+            "A surreal cyberpunk audiovisual project creating cinematic IMAX-scale soundscapes from the neon dark.",
+          sameAs: [
+            "https://www.youtube.com/@NeoShade-AI",
+            "https://open.spotify.com/artist/2DuUdfmZ26CFPtOOnp1DaV",
+          ],
+        }),
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },

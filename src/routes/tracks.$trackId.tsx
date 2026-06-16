@@ -13,7 +13,46 @@ import { formatMoney, formatDuration, youtubeThumb } from "@/lib/format";
 import { useState } from "react";
 
 export const Route = createFileRoute("/tracks/$trackId")({
-  head: () => ({ meta: [{ title: "Track — neoSHADE" }] }),
+  loader: ({ params }) => fetchTrack(params.trackId),
+  head: ({ loaderData, params }) => {
+    const track = loaderData;
+    const title = track ? `${track.title} — neoSHADE` : "Track — neoSHADE";
+    const desc = track
+      ? `${track.title} by ${track.artist} — stream on neoUNIVERSE${track.has_file ? `, or own the MP3 for $0.50.` : "."}`
+      : "Stream neoSHADE tracks on the neoUNIVERSE.";
+    const url = `https://universe.neo-shade.com/tracks/${params.trackId}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "music.song" },
+        { property: "og:url", content: url },
+        ...(track?.artwork_url ? [{ property: "og:image", content: track.artwork_url }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: track
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "MusicRecording",
+                name: track.title,
+                byArtist: { "@type": "MusicGroup", name: track.artist },
+                duration: track.duration_seconds
+                  ? `PT${track.duration_seconds}S`
+                  : undefined,
+                genre: (track.genres ?? []).length ? track.genres : undefined,
+                image: track.artwork_url ?? undefined,
+                url,
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: TrackPage,
   errorComponent: () => (
     <div className="mx-auto max-w-md px-4 py-20 text-center">

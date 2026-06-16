@@ -237,7 +237,7 @@ function VibeRow({ track, index, queue }: { track: Track; index: number; queue: 
       <span className="w-6 shrink-0 text-center font-display text-sm font-bold text-muted-foreground">
         {index + 1}
       </span>
-      <button onClick={onPlay} className="relative aspect-video w-24 shrink-0 overflow-hidden rounded-lg bg-secondary sm:w-28">
+      <button onClick={onPlay} aria-label={isCurrent && isPlaying ? `Pause ${track.title}` : `Play ${track.title}`} className="relative aspect-video w-24 shrink-0 overflow-hidden rounded-lg bg-secondary sm:w-28">
         {art ? (
           <img src={art} alt={track.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
         ) : (

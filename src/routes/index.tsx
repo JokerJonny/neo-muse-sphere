@@ -13,12 +13,14 @@ import type { Track } from "@/lib/types";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "neoSHADE · neoUNIVERSE — Music, Video & Store" },
+      { title: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
       { name: "description", content: "The official neoSHADE hub: stream surreal cyberpunk music & videos, explore albums, and own tracks for $0.50." },
-      { property: "og:title", content: "neoSHADE · neoUNIVERSE" },
+      { property: "og:title", content: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
       { property: "og:description", content: "Stream surreal cyberpunk music & videos from neoSHADE." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://universe.neo-shade.com/" },
     ],
+    links: [{ rel: "canonical", href: "https://universe.neo-shade.com/" }],
   }),
   component: Index,
 });
@@ -56,7 +58,10 @@ function Index() {
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-primary backdrop-blur">
             <Sparkles className="h-3.5 w-3.5" /> {BRAND.universe}
           </span>
-          <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.05] sm:text-7xl">
+          <h1
+            className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.05] sm:text-7xl"
+            aria-label="neoSHADE — Cyberpunk Music & Visuals"
+          >
             <GlitchText className="text-gradient">neoSHADE</GlitchText>
           </h1>
           <p className="mt-4 font-display text-lg font-semibold tracking-wide text-primary sm:text-xl">
@@ -104,7 +109,7 @@ function Index() {
         <Section title="Featured Videos" href="/videos">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredVideos.map((t) => (
-              <button key={t.id} onClick={() => openVideo(t)} className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]">
+              <button key={t.id} onClick={() => openVideo(t)} aria-label={`Play video: ${t.title}`} className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]">
                 <div className="relative aspect-video overflow-hidden bg-secondary">
                   <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-90" />
@@ -131,7 +136,7 @@ function Index() {
         <Section title="Trending in neoUNIVERSE" href="/videos" icon={<Flame className="h-5 w-5 text-accent" />}>
           <div className="grid gap-3 sm:grid-cols-2">
             {trending.data.map((t, i) => (
-              <button key={t.id} onClick={() => openVideo(t)} className="group flex items-center gap-4 rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-accent/60">
+              <button key={t.id} onClick={() => openVideo(t)} aria-label={`Play video: ${t.title}`} className="group flex items-center gap-4 rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-accent/60">
                 <span className="w-6 shrink-0 text-center font-display text-xl font-black text-muted-foreground">{i + 1}</span>
                 <div className="relative aspect-video w-32 shrink-0 overflow-hidden rounded-lg bg-secondary">
                   <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover" />

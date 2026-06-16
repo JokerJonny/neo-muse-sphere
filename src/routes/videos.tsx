@@ -10,13 +10,51 @@ import { SortFilter } from "@/components/SortFilter";
 import type { Track, SortMode } from "@/lib/types";
 
 export const Route = createFileRoute("/videos")({
-  head: () => ({
-    meta: [
-      { title: "Videos — neoSHADE" },
-      { name: "description", content: "Watch every neoSHADE music video in cinematic full-screen mode." },
-      { property: "og:title", content: "neoSHADE Videos" },
-    ],
-  }),
+  loader: () => fetchVideos("newest"),
+  head: ({ loaderData }) => {
+    const videos = (loaderData ?? []).slice(0, 12);
+    return {
+      meta: [
+        { title: "Videos — neoSHADE" },
+        { name: "description", content: "Watch every neoSHADE music video in cinematic full-screen mode." },
+        { property: "og:title", content: "neoSHADE Videos" },
+        { property: "og:description", content: "Cinematic neoSHADE music videos — stream the full neoUNIVERSE visual catalogue." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://universe.neo-shade.com/videos" },
+      ],
+      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/videos" }],
+      scripts: videos.length
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "neoSHADE Videos",
+                itemListElement: videos.map((v, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  item: {
+                    "@type": "VideoObject",
+                    name: v.title,
+                    thumbnailUrl: v.artwork_url ?? undefined,
+                    uploadDate: v.published_at ?? undefined,
+                    interactionStatistic: {
+                      "@type": "InteractionCounter",
+                      interactionType: "https://schema.org/WatchAction",
+                      userInteractionCount: v.view_count ?? 0,
+                    },
+                    embedUrl: v.youtube_id
+                      ? `https://www.youtube.com/embed/${v.youtube_id}`
+                      : undefined,
+                  },
+                })),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: Videos,
 });
 
@@ -61,6 +99,7 @@ function Videos() {
       {featured && (
         <button
           onClick={() => open(featured)}
+          aria-label={`Play video: ${featured.title}`}
           className="group relative mt-8 block w-full overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[var(--shadow-neon)] transition-all hover:border-accent/70"
         >
           <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9]">
@@ -116,6 +155,7 @@ function Videos() {
           <button
             key={t.id}
             onClick={() => open(t)}
+            aria-label={`Play video: ${t.title}`}
             className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]"
           >
             <div className="relative aspect-video overflow-hidden bg-secondary">
