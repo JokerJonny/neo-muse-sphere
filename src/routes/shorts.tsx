@@ -10,13 +10,51 @@ import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 import type { Track, SortMode } from "@/lib/types";
 
 export const Route = createFileRoute("/shorts")({
-  head: () => ({
-    meta: [
-      { title: "Shorts — neoSHADE" },
-      { name: "description", content: "Vertical neoSHADE Shorts — quick cinematic transmissions from the neon dark." },
-      { property: "og:title", content: "neoSHADE Shorts" },
-    ],
-  }),
+  loader: () => fetchShorts("newest"),
+  head: ({ loaderData }) => {
+    const shorts = (loaderData ?? []).slice(0, 12);
+    return {
+      meta: [
+        { title: "Shorts — neoSHADE" },
+        { name: "description", content: "Vertical neoSHADE Shorts — quick cinematic transmissions from the neon dark." },
+        { property: "og:title", content: "neoSHADE Shorts" },
+        { property: "og:description", content: "Quick vertical cinematic transmissions from the neoUNIVERSE." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://universe.neo-shade.com/shorts" },
+      ],
+      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/shorts" }],
+      scripts: shorts.length
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "neoSHADE Shorts",
+                itemListElement: shorts.map((v, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  item: {
+                    "@type": "VideoObject",
+                    name: v.title,
+                    thumbnailUrl: v.artwork_url ?? undefined,
+                    uploadDate: v.published_at ?? undefined,
+                    interactionStatistic: {
+                      "@type": "InteractionCounter",
+                      interactionType: "https://schema.org/WatchAction",
+                      userInteractionCount: v.view_count ?? 0,
+                    },
+                    embedUrl: v.youtube_id
+                      ? `https://www.youtube.com/embed/${v.youtube_id}`
+                      : undefined,
+                  },
+                })),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: Shorts,
 });
 
