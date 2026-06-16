@@ -79,6 +79,11 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
       },
       body: JSON.stringify({
         intent: "CAPTURE",
+        application_context: {
+          brand_name: "neoUNIVERSE",
+          shipping_preference: "NO_SHIPPING",
+          user_action: "PAY_NOW",
+        },
         purchase_units: [
           {
             amount: {
@@ -96,7 +101,7 @@ export const createPayPalOrder = createServerFn({ method: "POST" })
                 value: ((t.price_cents || 0) / 100).toFixed(2),
               },
             })),
-            description: `neoSHADE — ${buyable.length} track download(s)`.slice(0, 127),
+            description: `neoUNIVERSE — ${buyable.length} track download(s)`.slice(0, 127),
           },
         ],
       }),
