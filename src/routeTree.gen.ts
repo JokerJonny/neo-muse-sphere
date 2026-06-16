@@ -14,6 +14,7 @@ import { Route as ShortsRouteImport } from './routes/shorts'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as PlaylistsRouteImport } from './routes/playlists'
 import { Route as MerchRouteImport } from './routes/merch'
+import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -49,6 +50,11 @@ const PlaylistsRoute = PlaylistsRouteImport.update({
 const MerchRoute = MerchRouteImport.update({
   id: '/merch',
   path: '/merch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiscoverRoute = DiscoverRouteImport.update({
+  id: '/discover',
+  path: '/discover',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogRoute = CatalogRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/discover': typeof DiscoverRoute
   '/merch': typeof MerchRoute
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/discover': typeof DiscoverRoute
   '/merch': typeof MerchRoute
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/discover': typeof DiscoverRoute
   '/merch': typeof MerchRoute
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/discover'
     | '/merch'
     | '/playlists'
     | '/posts'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/discover'
     | '/merch'
     | '/posts'
     | '/shorts'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/discover'
     | '/merch'
     | '/playlists'
     | '/posts'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
+  DiscoverRoute: typeof DiscoverRoute
   MerchRoute: typeof MerchRoute
   PlaylistsRoute: typeof PlaylistsRouteWithChildren
   PostsRoute: typeof PostsRoute
@@ -262,6 +275,13 @@ declare module '@tanstack/react-router' {
       path: '/merch'
       fullPath: '/merch'
       preLoaderRoute: typeof MerchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/discover': {
+      id: '/discover'
+      path: '/discover'
+      fullPath: '/discover'
+      preLoaderRoute: typeof DiscoverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalog': {
@@ -378,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
+  DiscoverRoute: DiscoverRoute,
   MerchRoute: MerchRoute,
   PlaylistsRoute: PlaylistsRouteWithChildren,
   PostsRoute: PostsRoute,
