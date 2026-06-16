@@ -22,7 +22,13 @@ interface YTPlaylist {
   description: string;
   thumbnail: string | null;
   publishedAt: string;
+  official: boolean;
   items: { videoId: string; title: string; thumbnail: string | null; position: number }[];
+}
+
+/** YouTube Music album/single playlists (the "Releases" tab) use this prefix. */
+function isOfficialRelease(playlistId: string): boolean {
+  return playlistId.startsWith("OLAK5uy_") || playlistId.startsWith("RDCLAK5uy_");
 }
 
 function parseDuration(iso?: string | null): number | null {
