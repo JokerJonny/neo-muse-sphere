@@ -9,6 +9,7 @@ export const BRAND = {
   spotifyArtistId: "2DuUdfmZ26CFPtOOnp1DaV",
   spotifyUrl: "https://open.spotify.com/artist/2DuUdfmZ26CFPtOOnp1DaV",
   site: "https://neo-shade.com",
+  merchUrl: "https://neoshade.printify.me/",
   trackPriceCents: 50,
 };
 
