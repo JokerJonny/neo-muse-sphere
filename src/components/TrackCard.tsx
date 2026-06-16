@@ -60,9 +60,11 @@ export function TrackCard({
       <div className="space-y-2 p-3">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            <h3 className="truncate font-semibold leading-tight" title={track.title}>
-              {track.title}
-            </h3>
+            <Link to="/tracks/$trackId" params={{ trackId: track.id }} className="block">
+              <h3 className="truncate font-semibold leading-tight hover:text-primary" title={track.title}>
+                {track.title}
+              </h3>
+            </Link>
             <p className="truncate text-xs text-muted-foreground">{track.artist}</p>
           </div>
           {isCurrent && <Equalizer active={isPlaying} />}
