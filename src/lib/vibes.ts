@@ -67,7 +67,7 @@ export const VIBES: Vibe[] = [
     label: "neoCINEMATIC",
     tagline: "Epic scores & sweeping journeys",
     keywords: ["cinematic", "epic", "orchestral", "film", "score", "journey", "imax", "soundtrack", "dramatic", "sweeping", "story", "saga", "ancient", "temple"],
-    from: "#4338ca", to: "#0ea5e9", emoji: "🎬",
+    from: "#4338ca", to: "#0ea5e9", emoji: "🎬", image: cinematicImg.url,
   },
   {
     id: "shadow",
