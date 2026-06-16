@@ -46,7 +46,7 @@ export const VIBES: Vibe[] = [
     label: "neoREGGAE",
     tagline: "Island roots & sunshine riddim",
     keywords: ["reggae", "island", "dub", "roots", "caribbean", "jamaica", "riddim", "dancehall", "sunshine", "tropical", "beach", "palm"],
-    from: "#16a34a", to: "#facc15", emoji: "🌴",
+    from: "#16a34a", to: "#facc15", emoji: "🌴", image: reggaeImg.url,
   },
   {
     id: "healing",
