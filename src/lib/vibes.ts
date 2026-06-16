@@ -53,7 +53,7 @@ export const VIBES: Vibe[] = [
     label: "neoHEALING",
     tagline: "Calm, presence & recovery",
     keywords: ["healing", "heal", "calm", "peace", "breathe", "breathing", "meditation", "ambient", "recovery", "restore", "gentle", "presence", "mindful", "soft", "still", "quiet", "rest"],
-    from: "#0d9488", to: "#a3e635", emoji: "🌿",
+    from: "#0d9488", to: "#a3e635", emoji: "🌿", image: healingImg.url,
   },
   {
     id: "rebellion",
