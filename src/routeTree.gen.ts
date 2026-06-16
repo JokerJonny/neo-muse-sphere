@@ -24,7 +24,6 @@ import { Route as TracksTrackIdRouteImport } from './routes/tracks.$trackId'
 import { Route as PlaylistsPlaylistIdRouteImport } from './routes/playlists.$playlistId'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
-import { Route as ApiPublicYtDiagRouteImport } from './routes/api/public/yt-diag'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -100,11 +99,6 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ApiPublicYtDiagRoute = ApiPublicYtDiagRouteImport.update({
-  id: '/api/public/yt-diag',
-  path: '/api/public/yt-diag',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -121,7 +115,6 @@ export interface FileRoutesByFullPath {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists/': typeof PlaylistsIndexRoute
-  '/api/public/yt-diag': typeof ApiPublicYtDiagRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -137,7 +130,6 @@ export interface FileRoutesByTo {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists': typeof PlaylistsIndexRoute
-  '/api/public/yt-diag': typeof ApiPublicYtDiagRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -156,7 +148,6 @@ export interface FileRoutesById {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists/': typeof PlaylistsIndexRoute
-  '/api/public/yt-diag': typeof ApiPublicYtDiagRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -175,7 +166,6 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists/'
-    | '/api/public/yt-diag'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -191,7 +181,6 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists'
-    | '/api/public/yt-diag'
   id:
     | '__root__'
     | '/'
@@ -209,7 +198,6 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists/'
-    | '/api/public/yt-diag'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,7 +212,6 @@ export interface RootRouteChildren {
   ShortsRoute: typeof ShortsRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
-  ApiPublicYtDiagRoute: typeof ApiPublicYtDiagRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -334,13 +321,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/public/yt-diag': {
-      id: '/api/public/yt-diag'
-      path: '/api/public/yt-diag'
-      fullPath: '/api/public/yt-diag'
-      preLoaderRoute: typeof ApiPublicYtDiagRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -383,7 +363,6 @@ const rootRouteChildren: RootRouteChildren = {
   ShortsRoute: ShortsRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
-  ApiPublicYtDiagRoute: ApiPublicYtDiagRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
