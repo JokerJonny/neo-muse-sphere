@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Play } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { fetchVideos } from "@/lib/queries";
-import { youtubeThumb } from "@/lib/format";
+import { youtubeThumb, formatDuration } from "@/lib/format";
+import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
