@@ -11,17 +11,20 @@ import { youtubeThumb, formatViews } from "@/lib/format";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
-      { name: "description", content: "The official neoSHADE hub: stream surreal cyberpunk music & videos, explore albums, and own tracks for $0.50." },
-      { property: "og:title", content: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
-      { property: "og:description", content: "Stream surreal cyberpunk music & videos from neoSHADE." },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://universe.neo-shade.com/" },
-    ],
-    links: [{ rel: "canonical", href: "https://universe.neo-shade.com/" }],
-  }),
+  head: () => {
+    const url = siteUrl("/");
+    return {
+      meta: [
+        { title: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
+        { name: "description", content: "The official neoSHADE hub: stream surreal cyberpunk music & videos, explore albums, and own tracks for $0.50." },
+        { property: "og:title", content: "neoSHADE · neoUNIVERSE — Cyberpunk Music & Visuals" },
+        { property: "og:description", content: "Stream surreal cyberpunk music & videos from neoSHADE." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Index,
 });
 
