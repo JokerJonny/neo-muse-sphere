@@ -23,10 +23,16 @@ function Videos() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="font-display text-3xl font-bold sm:text-4xl">Videos</h1>
-      <p className="mt-1 text-muted-foreground">Cinematic visuals from the neoUNIVERSE.</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-bold sm:text-4xl">Videos</h1>
+          <p className="mt-1 text-muted-foreground">Cinematic visuals from the neoUNIVERSE.</p>
+        </div>
+        <SyncYouTubeButton />
+      </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
         {(data ?? []).map((t) => (
           <button
             key={t.id}
