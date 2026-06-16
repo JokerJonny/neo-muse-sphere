@@ -35,6 +35,7 @@ export function PayPalCheckout({
       <PayPalScriptProvider
         options={{
           clientId: PAYPAL_CLIENT_ID,
+          merchantId: PAYPAL_MERCHANT_ID,
           currency: "USD",
           intent: "capture",
           components: "buttons",
