@@ -212,7 +212,7 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
   if (tErr) throw tErr;
 
   const byId = new Map<string, Track>();
-  for (const t of tracks ?? []) if (t.youtube_id) byId.set(t.youtube_id, t);
+  for (const t of (tracks ?? []) as Track[]) if (t.youtube_id) byId.set(t.youtube_id, t);
 
   const ordered: Track[] = [];
   for (const it of validItems) {
@@ -230,5 +230,5 @@ export async function fetchTrack(id: string): Promise<Track | null> {
     .eq("is_published", true)
     .maybeSingle();
   if (error) throw error;
-  return data;
+  return (data as Track | null) ?? null;
 }
