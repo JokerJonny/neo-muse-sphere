@@ -16,7 +16,6 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AlbumsRouteImport } from './routes/albums'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 
 const VideosRoute = VideosRouteImport.update({
@@ -53,11 +52,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
-  id: '/checkout/success',
-  path: '/checkout/success',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
   id: '/library',
   path: '/library',
@@ -72,7 +66,6 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/videos': typeof VideosRoute
   '/library': typeof AuthenticatedLibraryRoute
-  '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -82,7 +75,6 @@ export interface FileRoutesByTo {
   '/catalog': typeof CatalogRoute
   '/videos': typeof VideosRoute
   '/library': typeof AuthenticatedLibraryRoute
-  '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -94,7 +86,6 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/videos': typeof VideosRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
-  '/checkout/success': typeof CheckoutSuccessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -106,17 +97,8 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/videos'
     | '/library'
-    | '/checkout/success'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/albums'
-    | '/auth'
-    | '/cart'
-    | '/catalog'
-    | '/videos'
-    | '/library'
-    | '/checkout/success'
+  to: '/' | '/albums' | '/auth' | '/cart' | '/catalog' | '/videos' | '/library'
   id:
     | '__root__'
     | '/'
@@ -127,7 +109,6 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/videos'
     | '/_authenticated/library'
-    | '/checkout/success'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -138,7 +119,6 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
   VideosRoute: typeof VideosRoute
-  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,13 +172,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/checkout/success': {
-      id: '/checkout/success'
-      path: '/checkout/success'
-      fullPath: '/checkout/success'
-      preLoaderRoute: typeof CheckoutSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated/library': {
       id: '/_authenticated/library'
       path: '/library'
@@ -228,7 +201,6 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
   VideosRoute: VideosRoute,
-  CheckoutSuccessRoute: CheckoutSuccessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
