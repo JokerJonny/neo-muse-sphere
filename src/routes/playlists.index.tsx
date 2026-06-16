@@ -5,13 +5,44 @@ import { fetchYouTubePlaylists } from "@/lib/queries";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 
 export const Route = createFileRoute("/playlists/")({
-  head: () => ({
-    meta: [
-      { title: "Playlists — neoSHADE" },
-      { name: "description", content: "Explore curated neoSHADE playlists from the neoUNIVERSE." },
-      { property: "og:title", content: "neoSHADE Playlists" },
-    ],
-  }),
+  loader: () => fetchYouTubePlaylists(),
+  head: ({ loaderData }) => {
+    const playlists = (loaderData ?? []).slice(0, 20);
+    return {
+      meta: [
+        { title: "Playlists — neoSHADE" },
+        { name: "description", content: "Explore curated neoSHADE playlists from the neoUNIVERSE." },
+        { property: "og:title", content: "neoSHADE Playlists" },
+        { property: "og:description", content: "Curated neoSHADE collections — full sets streamed straight from the neoUNIVERSE." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://universe.neo-shade.com/playlists" },
+      ],
+      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/playlists" }],
+      scripts: playlists.length
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "neoSHADE Playlists",
+                itemListElement: playlists.map((p, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  item: {
+                    "@type": "MusicPlaylist",
+                    name: p.title,
+                    numTracks: p.item_count,
+                    image: p.artwork_url ?? undefined,
+                    url: `https://universe.neo-shade.com/playlists/${p.id}`,
+                  },
+                })),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: Playlists,
 });
 
