@@ -82,46 +82,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "neoSHADE — Music, Video & Lore from the neon dark" },
-      {
-        name: "description",
-        content:
-          "Official hub for neoSHADE: stream surreal cyberpunk music, watch cinematic videos, discover tracks by vibe, and own MP3 downloads for $0.50.",
-      },
-      { name: "author", content: "neoSHADE" },
-      { property: "og:site_name", content: "neoUNIVERSE" },
-      { property: "og:title", content: "neoSHADE · neoUNIVERSE" },
-      {
-        property: "og:description",
-        content:
-          "Surreal cyberpunk music & cinematic videos from neoSHADE — stream, discover by vibe, and own tracks for $0.50.",
-      },
+      { title: "neoUNIVERSE: Music · Video · Lore" },
+      { name: "description", content: "neoUNIVERSE the official immersive cyberpunk portal for neoSHADE. Music · Video · Lore from the neon dark. Stream cinematic releases, explore emotional journeys" },
+      { name: "author", content: "Lovable" },
+      { property: "og:title", content: "neoUNIVERSE: Music · Video · Lore" },
+      { property: "og:description", content: "neoUNIVERSE the official immersive cyberpunk portal for neoSHADE. Music · Video · Lore from the neon dark. Stream cinematic releases, explore emotional journeys" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "neoSHADE · neoUNIVERSE" },
-      {
-        name: "twitter:description",
-        content: "Surreal cyberpunk music & cinematic videos from neoSHADE.",
-      },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "MusicGroup",
-          name: "neoSHADE",
-          alternateName: "NeoShade-AI",
-          url: "https://universe.neo-shade.com",
-          genre: ["Cyberpunk", "Synthwave", "Cinematic", "Electronic"],
-          description:
-            "A surreal cyberpunk audiovisual project creating cinematic IMAX-scale soundscapes from the neon dark.",
-          sameAs: [
-            "https://www.youtube.com/@NeoShade-AI",
-            "https://open.spotify.com/artist/2DuUdfmZ26CFPtOOnp1DaV",
-          ],
-        }),
-      },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "neoUNIVERSE: Music · Video · Lore" },
+      { name: "twitter:description", content: "neoUNIVERSE the official immersive cyberpunk portal for neoSHADE. Music · Video · Lore from the neon dark. Stream cinematic releases, explore emotional journeys" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9xf40gVFkPhn0yJxhAa2RnpQNjx1/social-images/social-1781610749283-facebook_basnner_june_206.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9xf40gVFkPhn0yJxhAa2RnpQNjx1/social-images/social-1781610749283-facebook_basnner_june_206.webp" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
