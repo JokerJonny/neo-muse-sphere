@@ -24,12 +24,12 @@ export const Route = createFileRoute("/")({
 });
 
 const QUICK = [
+  { to: "/discover", label: "neoVIBES", icon: Sparkles, desc: "Curated by vibe" },
   { to: "/videos", label: "Videos", icon: Film, desc: "Cinematic visuals" },
   { to: "/shorts", label: "Shorts", icon: Zap, desc: "Vertical bursts" },
   { to: "/albums", label: "Releases", icon: Disc3, desc: "Albums & EPs" },
   { to: "/playlists", label: "Playlists", icon: ListVideo, desc: "Curated sets" },
-  { to: "/posts", label: "Posts", icon: MessageSquare, desc: "Community" },
-  { to: "/catalog", label: "Store", icon: Sparkles, desc: "Own tracks" },
+  { to: "/catalog", label: "Music Store", icon: ShoppingBag, desc: "Own tracks" },
 ] as const;
 
 function Index() {
