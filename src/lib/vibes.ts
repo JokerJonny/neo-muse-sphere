@@ -81,7 +81,7 @@ export const VIBES: Vibe[] = [
     label: "neoLIGHTNING",
     tagline: "Thunder, speed & raw power",
     keywords: ["lightning", "thunder", "storm", "electric", "speed", "mach", "afterburner", "fire", "blaze", "charge", "surge", "raptor", "freedom", "explosive"],
-    from: "#0891b2", to: "#facc15", emoji: "⚡",
+    from: "#0891b2", to: "#facc15", emoji: "⚡", image: lightningImg.url,
   },
   {
     id: "africa",
