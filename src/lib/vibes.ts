@@ -1,4 +1,12 @@
 import type { Track } from "@/lib/types";
+import cinematicImg from "@/assets/vibes/cinematic.jpg.asset.json";
+import healingImg from "@/assets/vibes/healing.jpg.asset.json";
+import lightningImg from "@/assets/vibes/lightning.jpg.asset.json";
+import jazzImg from "@/assets/vibes/jazz.jpg.asset.json";
+import clubImg from "@/assets/vibes/club.jpg.asset.json";
+import reggaeImg from "@/assets/vibes/reggae.jpg.asset.json";
+import rebellionImg from "@/assets/vibes/rebellion.jpg.asset.json";
+import shadowImg from "@/assets/vibes/shadow.jpg.asset.json";
 
 /** A neoVIBE — an emotional/genre lens over the whole neoUNIVERSE catalog. */
 export interface Vibe {
@@ -11,9 +19,12 @@ export interface Vibe {
   from: string;
   to: string;
   emoji: string;
+  /** Optional cover image for the card. */
+  image?: string;
   /** When true, ignores keywords and builds a random emotional journey. */
   random?: boolean;
 }
+
 
 export const VIBES: Vibe[] = [
   {
