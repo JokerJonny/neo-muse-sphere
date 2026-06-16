@@ -74,7 +74,7 @@ export const VIBES: Vibe[] = [
     label: "neoSHADOW",
     tagline: "Dark nights & shadow work",
     keywords: ["shadow", "dark", "darkness", "night", "late night", "monster", "ego", "mask", "fear", "void", "abyss", "noir", "hidden", "demon", "midnight"],
-    from: "#1e1b4b", to: "#6d28d9", emoji: "🌑",
+    from: "#1e1b4b", to: "#6d28d9", emoji: "🌑", image: shadowImg.url,
   },
   {
     id: "lightning",
