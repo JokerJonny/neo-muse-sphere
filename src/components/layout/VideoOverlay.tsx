@@ -33,25 +33,28 @@ export function VideoOverlay() {
   const p = usePlayer();
   const [retryNonce, setRetryNonce] = useState(0);
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("loading");
-  if (!p.videoOpen || !p.current?.youtube_id) return null;
 
-  const videoId = p.current.youtube_id;
-  const isShort = p.current.is_short;
+  const current = p.current;
+  const videoId = current?.youtube_id ?? "";
+  const isShort = !!current?.is_short;
+  const isVisible = !!p.videoOpen && !!videoId;
   const embedSrc = useMemo(() => {
     const params = new URLSearchParams({
       autoplay: "1",
       rel: "0",
       modestbranding: "1",
       playsinline: "1",
-      title: p.current?.title ?? "neoSHADE video",
+      title: current?.title ?? "neoSHADE video",
       short: isShort ? "1" : "0",
       r: String(retryNonce),
     });
     return `/embed/youtube/${encodeURIComponent(videoId)}?${params.toString()}`;
-  }, [isShort, p.current?.title, retryNonce, videoId]);
+  }, [current?.title, isShort, retryNonce, videoId]);
   const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   useEffect(() => {
+    if (!isVisible) return;
+
     setPlayerStatus("loading");
 
     const slowTimer = window.setTimeout(() => {
@@ -74,7 +77,7 @@ export function VideoOverlay() {
       window.clearTimeout(slowTimer);
       window.removeEventListener("message", onMessage);
     };
-  }, [retryNonce, videoId]);
+  }, [isVisible, retryNonce, videoId]);
 
   const retry = () => {
     setPlayerStatus("loading");
@@ -82,6 +85,8 @@ export function VideoOverlay() {
   };
 
   const hasPlaybackIssue = playerStatus === "slow" || playerStatus === "error";
+
+  if (!isVisible || !current) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4 backdrop-blur-xl">
@@ -102,7 +107,7 @@ export function VideoOverlay() {
           <iframe
             className="h-full w-full"
             src={embedSrc}
-            title={p.current.title}
+            title={current.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             referrerPolicy="origin-when-cross-origin"
