@@ -1,27 +1,27 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Track, Album, SortMode, YouTubePlaylist } from "@/lib/types";
 
-type Query = ReturnType<ReturnType<typeof supabase.from<"tracks">>["select"]>;
+async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track[]> {
+  let q = supabase
+    .from("tracks")
+    .select("*")
+    .eq("is_published", true)
+    .eq("is_short", isShort)
+    .not("youtube_id", "is", null);
 
-function applySort<T extends { order: Query["order"] }>(q: T, sort: SortMode): T {
-  switch (sort) {
-    case "popular":
-      // @ts-expect-error chained builder typing
-      return q.order("view_count", { ascending: false }).order("published_at", {
-        ascending: false,
-        nullsFirst: false,
-      });
-    case "oldest":
-      // @ts-expect-error chained builder typing
-      return q.order("published_at", { ascending: true, nullsFirst: false });
-    case "newest":
-    default:
-      // @ts-expect-error chained builder typing
-      return q.order("published_at", { ascending: false, nullsFirst: false }).order(
-        "created_at",
-        { ascending: false },
-      );
+  if (sort === "popular") {
+    q = q.order("view_count", { ascending: false });
+  } else if (sort === "oldest") {
+    q = q.order("published_at", { ascending: true, nullsFirst: false });
+  } else {
+    q = q
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: false });
   }
+
+  const { data, error } = await q;
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function fetchTracks(opts?: {
