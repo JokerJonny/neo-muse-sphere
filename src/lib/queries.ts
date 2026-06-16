@@ -171,6 +171,7 @@ function synthesizeTrack(item: {
     spotify_id: null,
     source: "youtube",
     file_path: null,
+    has_file: false,
     preview_url: null,
     artwork_url: item.artwork_url,
     description: null,
