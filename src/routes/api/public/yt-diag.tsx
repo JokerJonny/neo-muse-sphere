@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ytDiag } from "@/lib/yt-diag.functions";
 
-export const Route = createFileRoute("/api/yt-diag")({
+export const Route = createFileRoute("/api/public/yt-diag")({
   server: {
     handlers: {
       GET: async () => {
