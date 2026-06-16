@@ -7,6 +7,7 @@ import { usePlayer } from "@/hooks/use-player";
 import { fetchYouTubePlaylists, fetchPlaylistTracks } from "@/lib/queries";
 import { SyncReleasesButton } from "@/components/SyncReleasesButton";
 import type { YouTubePlaylist } from "@/lib/types";
+import { siteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/albums")({
   loader: () => fetchYouTubePlaylists(),
