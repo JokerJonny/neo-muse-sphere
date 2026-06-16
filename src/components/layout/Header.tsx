@@ -15,6 +15,7 @@ import {
 
 const NAV = [
   { to: "/", label: "Home" },
+  { to: "/discover", label: "neoVIBES" },
   { to: "/videos", label: "Videos" },
   { to: "/shorts", label: "Shorts" },
   { to: "/albums", label: "Releases" },
