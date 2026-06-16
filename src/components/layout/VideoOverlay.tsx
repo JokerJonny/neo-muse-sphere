@@ -7,6 +7,11 @@ export function VideoOverlay() {
   if (!p.videoOpen || !p.current?.youtube_id) return null;
 
   const isShort = p.current.is_short;
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const embedSrc =
+    `https://www.youtube-nocookie.com/embed/${p.current.youtube_id}` +
+    `?autoplay=1&rel=0&playsinline=1&modestbranding=1` +
+    (origin ? `&origin=${encodeURIComponent(origin)}` : "");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4 backdrop-blur-xl">
