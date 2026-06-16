@@ -19,6 +19,7 @@ import { Route as AlbumsRouteImport } from './routes/albums'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TracksTrackIdRouteImport } from './routes/tracks.$trackId'
+import { Route as PlaylistsPlaylistIdRouteImport } from './routes/playlists.$playlistId'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -71,6 +72,11 @@ const TracksTrackIdRoute = TracksTrackIdRouteImport.update({
   path: '/tracks/$trackId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaylistsPlaylistIdRoute = PlaylistsPlaylistIdRouteImport.update({
+  id: '/$playlistId',
+  path: '/$playlistId',
+  getParentRoute: () => PlaylistsRoute,
+} as any)
 const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
   id: '/library',
   path: '/library',
@@ -88,11 +94,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/playlists': typeof PlaylistsRoute
+  '/playlists': typeof PlaylistsRouteWithChildren
   '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
 }
 export interface FileRoutesByTo {
@@ -101,11 +108,12 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/playlists': typeof PlaylistsRoute
+  '/playlists': typeof PlaylistsRouteWithChildren
   '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
 }
 export interface FileRoutesById {
@@ -116,11 +124,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/playlists': typeof PlaylistsRoute
+  '/playlists': typeof PlaylistsRouteWithChildren
   '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
 }
 export interface FileRouteTypes {
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/admin'
     | '/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/admin'
     | '/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
   id:
     | '__root__'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/_authenticated/admin'
     | '/_authenticated/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
   fileRoutesById: FileRoutesById
 }
@@ -173,7 +185,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
-  PlaylistsRoute: typeof PlaylistsRoute
+  PlaylistsRoute: typeof PlaylistsRouteWithChildren
   ShortsRoute: typeof ShortsRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
@@ -251,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TracksTrackIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playlists/$playlistId': {
+      id: '/playlists/$playlistId'
+      path: '/$playlistId'
+      fullPath: '/playlists/$playlistId'
+      preLoaderRoute: typeof PlaylistsPlaylistIdRouteImport
+      parentRoute: typeof PlaylistsRoute
+    }
     '/_authenticated/library': {
       id: '/_authenticated/library'
       path: '/library'
@@ -281,6 +300,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PlaylistsRouteChildren {
+  PlaylistsPlaylistIdRoute: typeof PlaylistsPlaylistIdRoute
+}
+
+const PlaylistsRouteChildren: PlaylistsRouteChildren = {
+  PlaylistsPlaylistIdRoute: PlaylistsPlaylistIdRoute,
+}
+
+const PlaylistsRouteWithChildren = PlaylistsRoute._addFileChildren(
+  PlaylistsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -288,7 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
-  PlaylistsRoute: PlaylistsRoute,
+  PlaylistsRoute: PlaylistsRouteWithChildren,
   ShortsRoute: ShortsRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
