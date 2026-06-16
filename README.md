@@ -1,4 +1,4 @@
-# neoUNIVERSE
+# neoUNIVERSE 
 
 ![neoUNIVERSE Banner](https://neo-shade.com/wp-content/uploads/2026/06/universe-banner.jpg)
 
