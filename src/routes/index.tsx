@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Youtube, Sparkles, Play, Flame, Eye, Film, Zap, ListVideo, Disc3, MessageSquare } from "lucide-react";
+import { ArrowRight, Youtube, Sparkles, Play, Flame, Eye, Film, Zap, ListVideo, Disc3, ShoppingBag } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import { BRAND } from "@/lib/constants";
 import { GlitchText } from "@/components/GlitchText";
