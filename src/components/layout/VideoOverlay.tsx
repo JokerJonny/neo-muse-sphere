@@ -85,7 +85,7 @@ export function VideoOverlay() {
     setRetryNonce((value) => value + 1);
   };
 
-  const hasPlaybackIssue = playerStatus === "slow" || playerStatus === "error";
+
 
   if (!isVisible || !current) return null;
 
