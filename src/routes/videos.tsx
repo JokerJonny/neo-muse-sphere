@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Play } from "lucide-react";
+import { Play, Clock, Film } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { fetchVideos } from "@/lib/queries";
 import { youtubeThumb, formatDuration } from "@/lib/format";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
+import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -21,50 +22,119 @@ function Videos() {
   const player = usePlayer();
   const { data, isLoading } = useQuery({ queryKey: ["videos"], queryFn: fetchVideos });
 
+  const videos = data ?? [];
+  const featured = videos[0];
+  const rest = videos.slice(1);
+
+  const open = (t: Track) => {
+    player.playTrack(t, videos);
+    player.openVideo();
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-bold sm:text-4xl">Videos</h1>
-          <p className="mt-1 text-muted-foreground">Cinematic visuals from the neoUNIVERSE.</p>
+      {/* Header */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+        <div className="min-w-0">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+            <Film className="h-3.5 w-3.5" /> neoUNIVERSE Visuals
+          </span>
+          <h1 className="mt-3 font-display text-3xl font-bold sm:text-5xl">Videos</h1>
+          <p className="mt-1 text-muted-foreground">
+            {videos.length ? `${videos.length} cinematic visuals` : "Cinematic visuals from the neoUNIVERSE."}
+          </p>
         </div>
         <SyncYouTubeButton />
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Featured hero */}
+      {featured && (
+        <button
+          onClick={() => open(featured)}
+          className="group relative mt-8 block w-full overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[var(--shadow-neon)] transition-all hover:border-accent/70"
+        >
+          <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9]">
+            <img
+              src={
+                youtubeThumb(featured.youtube_id, "maxres") ??
+                featured.artwork_url ??
+                youtubeThumb(featured.youtube_id) ??
+                ""
+              }
+              alt={featured.title}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
 
-        {(data ?? []).map((t) => (
+            <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground shadow-[var(--shadow-neon)]">
+              Latest Drop
+            </span>
+
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-8">
+              <div className="min-w-0">
+                <h2 className="font-display text-xl font-bold leading-tight sm:text-3xl">
+                  {featured.title}
+                </h2>
+                <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
+                  <span>{featured.artist}</span>
+                  {featured.duration_seconds ? (
+                    <span className="inline-flex items-center gap-1 font-mono">
+                      <Clock className="h-3.5 w-3.5" /> {formatDuration(featured.duration_seconds)}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+              <span className="hidden shrink-0 items-center gap-2 rounded-full bg-accent px-5 py-3 font-semibold text-accent-foreground shadow-[var(--shadow-neon)] transition-transform group-hover:scale-105 sm:inline-flex">
+                <Play className="h-5 w-5 translate-x-[1px]" fill="currentColor" /> Play
+              </span>
+            </div>
+
+            {/* mobile centered play */}
+            <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent/90 text-accent-foreground shadow-[var(--shadow-neon)] opacity-0 transition-opacity group-hover:opacity-100 sm:hidden">
+              <Play className="h-7 w-7 translate-x-[1px]" fill="currentColor" />
+            </span>
+          </div>
+        </button>
+      )}
+
+      {/* Grid */}
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {rest.map((t) => (
           <button
             key={t.id}
-            onClick={() => {
-              player.playTrack(t, data);
-              player.openVideo();
-            }}
-            className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-colors hover:border-accent/60"
+            onClick={() => open(t)}
+            className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]"
           >
             <div className="relative aspect-video overflow-hidden bg-secondary">
-              <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              <div className="absolute inset-0 flex items-center justify-center bg-background/30 opacity-0 transition-opacity group-hover:opacity-100">
+              <img
+                src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""}
+                alt={t.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-90" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-[var(--shadow-neon)]">
                   <Play className="h-6 w-6 translate-x-[1px]" fill="currentColor" />
                 </span>
               </div>
               {t.duration_seconds ? (
-                <span className="absolute bottom-2 right-2 rounded bg-background/85 px-1.5 py-0.5 font-mono text-[11px] text-foreground">
+                <span className="absolute bottom-2 right-2 rounded bg-background/85 px-1.5 py-0.5 font-mono text-[11px] text-foreground backdrop-blur-sm">
                   {formatDuration(t.duration_seconds)}
                 </span>
               ) : null}
             </div>
             <div className="p-3">
-              <p className="truncate font-semibold">{t.title}</p>
+              <p className="truncate font-semibold transition-colors group-hover:text-accent">{t.title}</p>
               <p className="truncate text-xs text-muted-foreground">{t.artist}</p>
             </div>
-
           </button>
         ))}
       </div>
+
       {isLoading && <p className="mt-8 text-center text-muted-foreground">Loading…</p>}
-      {!isLoading && !data?.length && (
+      {!isLoading && !videos.length && (
         <div className="mt-12 flex flex-col items-center gap-4 rounded-xl border border-dashed border-border p-10 text-center">
           <p className="text-muted-foreground">No videos yet. Sync the @NeoShade-AI channel to import them.</p>
           <SyncYouTubeButton />
