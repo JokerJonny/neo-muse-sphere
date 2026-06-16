@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { X, ExternalLink } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +12,7 @@ export function VideoOverlay() {
     `https://www.youtube-nocookie.com/embed/${p.current.youtube_id}` +
     `?autoplay=1&rel=0&playsinline=1&modestbranding=1` +
     (origin ? `&origin=${encodeURIComponent(origin)}` : "");
+  const watchUrl = `https://www.youtube.com/watch?v=${p.current.youtube_id}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4 backdrop-blur-xl">
@@ -22,19 +23,30 @@ export function VideoOverlay() {
       >
         <X className="h-5 w-5" />
       </button>
-      <div
-        className={cn(
-          "scanlines relative overflow-hidden rounded-xl neon-border",
-          isShort ? "aspect-[9/16] h-[88vh] max-h-[88vh] w-auto max-w-[94vw]" : "aspect-video w-full max-w-5xl",
-        )}
-      >
-        <iframe
-          className="h-full w-full"
-          src={embedSrc}
-          title={p.current.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+      <div className="flex flex-col items-center gap-3">
+        <div
+          className={cn(
+            "scanlines relative overflow-hidden rounded-xl neon-border",
+            isShort ? "aspect-[9/16] h-[82vh] max-h-[82vh] w-auto max-w-[94vw]" : "aspect-video w-full max-w-5xl",
+          )}
+        >
+          <iframe
+            className="h-full w-full"
+            src={embedSrc}
+            title={p.current.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <a
+          href={watchUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+        >
+          Player blocked? Watch on YouTube
+          <ExternalLink className="h-4 w-4" />
+        </a>
       </div>
     </div>
   );
