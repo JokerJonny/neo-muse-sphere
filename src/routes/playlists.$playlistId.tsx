@@ -7,7 +7,42 @@ import { youtubeThumb, formatDuration, formatViews } from "@/lib/format";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/playlists/$playlistId")({
-  head: () => ({ meta: [{ title: "Playlist — neoSHADE" }] }),
+  loader: ({ params }) => fetchPlaylist(params.playlistId),
+  head: ({ loaderData, params }) => {
+    const p = loaderData;
+    const title = p ? `${p.title} — neoSHADE Playlist` : "Playlist — neoSHADE";
+    const desc = p
+      ? `${p.title} — ${p.item_count} videos in this neoSHADE playlist. Stream the full set on the neoUNIVERSE.`
+      : "Stream curated neoSHADE playlists on the neoUNIVERSE.";
+    const url = `https://universe.neo-shade.com/playlists/${params.playlistId}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "music.playlist" },
+        { property: "og:url", content: url },
+        ...(p?.artwork_url ? [{ property: "og:image", content: p.artwork_url }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: p
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "MusicPlaylist",
+                name: p.title,
+                numTracks: p.item_count,
+                image: p.artwork_url ?? undefined,
+                url,
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: PlaylistDetail,
   errorComponent: ({ error }) => (
     <div role="alert" className="mx-auto max-w-3xl px-4 py-16 text-center text-muted-foreground">
