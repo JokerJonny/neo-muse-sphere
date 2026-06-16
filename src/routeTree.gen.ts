@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShortsRouteImport } from './routes/shorts'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as PlaylistsRouteImport } from './routes/playlists'
@@ -30,6 +31,11 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShortsRoute = ShortsRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/merch': typeof MerchRoute
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/videos': typeof VideosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/playlists'
     | '/posts'
     | '/shorts'
+    | '/sitemap.xml'
     | '/videos'
     | '/admin'
     | '/library'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/merch'
     | '/posts'
     | '/shorts'
+    | '/sitemap.xml'
     | '/videos'
     | '/admin'
     | '/library'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/playlists'
     | '/posts'
     | '/shorts'
+    | '/sitemap.xml'
     | '/videos'
     | '/_authenticated/admin'
     | '/_authenticated/library'
@@ -236,6 +248,7 @@ export interface RootRouteChildren {
   PlaylistsRoute: typeof PlaylistsRouteWithChildren
   PostsRoute: typeof PostsRoute
   ShortsRoute: typeof ShortsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
 }
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shorts': {
@@ -403,6 +423,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlaylistsRoute: PlaylistsRouteWithChildren,
   PostsRoute: PostsRoute,
   ShortsRoute: ShortsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
 }
