@@ -10,13 +10,51 @@ import { SortFilter } from "@/components/SortFilter";
 import type { Track, SortMode } from "@/lib/types";
 
 export const Route = createFileRoute("/videos")({
-  head: () => ({
-    meta: [
-      { title: "Videos — neoSHADE" },
-      { name: "description", content: "Watch every neoSHADE music video in cinematic full-screen mode." },
-      { property: "og:title", content: "neoSHADE Videos" },
-    ],
-  }),
+  loader: () => fetchVideos("newest"),
+  head: ({ loaderData }) => {
+    const videos = (loaderData ?? []).slice(0, 12);
+    return {
+      meta: [
+        { title: "Videos — neoSHADE" },
+        { name: "description", content: "Watch every neoSHADE music video in cinematic full-screen mode." },
+        { property: "og:title", content: "neoSHADE Videos" },
+        { property: "og:description", content: "Cinematic neoSHADE music videos — stream the full neoUNIVERSE visual catalogue." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://universe.neo-shade.com/videos" },
+      ],
+      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/videos" }],
+      scripts: videos.length
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "neoSHADE Videos",
+                itemListElement: videos.map((v, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  item: {
+                    "@type": "VideoObject",
+                    name: v.title,
+                    thumbnailUrl: v.artwork_url ?? undefined,
+                    uploadDate: v.published_at ?? undefined,
+                    interactionStatistic: {
+                      "@type": "InteractionCounter",
+                      interactionType: "https://schema.org/WatchAction",
+                      userInteractionCount: v.view_count ?? 0,
+                    },
+                    embedUrl: v.youtube_id
+                      ? `https://www.youtube.com/embed/${v.youtube_id}`
+                      : undefined,
+                  },
+                })),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: Videos,
 });
 
