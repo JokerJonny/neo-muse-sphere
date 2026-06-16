@@ -10,6 +10,7 @@ import { PayPalCheckout } from "@/components/PayPalCheckout";
 import { getDownloadUrl } from "@/lib/media.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMoney, formatDuration, youtubeThumb } from "@/lib/format";
+import { siteUrl } from "@/lib/site";
 import { useState } from "react";
 
 export const Route = createFileRoute("/tracks/$trackId")({
