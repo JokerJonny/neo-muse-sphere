@@ -114,7 +114,8 @@ function Merch() {
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
         <InfoCard icon={Truck} title="Worldwide Shipping" desc="Printed on demand and delivered globally." />
         <InfoCard icon={Package} title="Premium Quality" desc="Durable apparel and accessories built to last." />
-        <InfoCard icon={ShoppingBag} title="Secure Checkout" desc="Purchases handled on the official Printify storefront." />
+        <InfoCard icon={ShoppingBag} title="Pay with PayPal" desc="Secure PayPal checkout on the official Printify storefront." />
+
       </div>
 
       <p className="mt-10 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
