@@ -280,15 +280,19 @@ export type Database = {
           id: string
           is_published: boolean
           is_purchasable: boolean
+          is_short: boolean
+          like_count: number
           plays: number
           preview_url: string | null
           price_cents: number
+          published_at: string | null
           slug: string | null
           sort_order: number
           source: string
           spotify_id: string | null
           title: string
           updated_at: string
+          view_count: number
           youtube_id: string | null
         }
         Insert: {
@@ -304,15 +308,19 @@ export type Database = {
           id?: string
           is_published?: boolean
           is_purchasable?: boolean
+          is_short?: boolean
+          like_count?: number
           plays?: number
           preview_url?: string | null
           price_cents?: number
+          published_at?: string | null
           slug?: string | null
           sort_order?: number
           source?: string
           spotify_id?: string | null
           title: string
           updated_at?: string
+          view_count?: number
           youtube_id?: string | null
         }
         Update: {
@@ -328,15 +336,19 @@ export type Database = {
           id?: string
           is_published?: boolean
           is_purchasable?: boolean
+          is_short?: boolean
+          like_count?: number
           plays?: number
           preview_url?: string | null
           price_cents?: number
+          published_at?: string | null
           slug?: string | null
           sort_order?: number
           source?: string
           spotify_id?: string | null
           title?: string
           updated_at?: string
+          view_count?: number
           youtube_id?: string | null
         }
         Relationships: [
@@ -364,6 +376,86 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      youtube_playlist_items: {
+        Row: {
+          artwork_url: string | null
+          created_at: string
+          id: string
+          playlist_id: string
+          position: number
+          title: string
+          youtube_id: string
+        }
+        Insert: {
+          artwork_url?: string | null
+          created_at?: string
+          id?: string
+          playlist_id: string
+          position?: number
+          title?: string
+          youtube_id: string
+        }
+        Update: {
+          artwork_url?: string | null
+          created_at?: string
+          id?: string
+          playlist_id?: string
+          position?: number
+          title?: string
+          youtube_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "youtube_playlist_items_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "youtube_playlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      youtube_playlists: {
+        Row: {
+          artwork_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean
+          item_count: number
+          published_at: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          youtube_playlist_id: string
+        }
+        Insert: {
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          item_count?: number
+          published_at?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          youtube_playlist_id: string
+        }
+        Update: {
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          item_count?: number
+          published_at?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          youtube_playlist_id?: string
         }
         Relationships: []
       }
