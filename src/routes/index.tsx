@@ -58,7 +58,10 @@ function Index() {
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/40 px-3 py-1 text-xs uppercase tracking-[0.2em] text-primary backdrop-blur">
             <Sparkles className="h-3.5 w-3.5" /> {BRAND.universe}
           </span>
-          <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.05] sm:text-7xl">
+          <h1
+            className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.05] sm:text-7xl"
+            aria-label="neoSHADE — Cyberpunk Music & Visuals"
+          >
             <GlitchText className="text-gradient">neoSHADE</GlitchText>
           </h1>
           <p className="mt-4 font-display text-lg font-semibold tracking-wide text-primary sm:text-xl">
