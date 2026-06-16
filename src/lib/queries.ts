@@ -68,7 +68,7 @@ export async function fetchCatalogForVibes(): Promise<Track[]> {
     .order("view_count", { ascending: false, nullsFirst: false })
     .limit(1000);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchFeaturedTracks(): Promise<Track[]> {
@@ -79,7 +79,7 @@ export async function fetchFeaturedTracks(): Promise<Track[]> {
     .eq("featured", true)
     .limit(8);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchLatestTracks(limit = 6): Promise<Track[]> {
@@ -92,7 +92,7 @@ export async function fetchLatestTracks(limit = 6): Promise<Track[]> {
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchAlbums(): Promise<Album[]> {
@@ -127,7 +127,7 @@ export async function fetchTrending(limit = 8): Promise<Track[]> {
     .order("view_count", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchYouTubePlaylists(): Promise<YouTubePlaylist[]> {
