@@ -20,7 +20,7 @@ export const Route = createFileRoute("/tracks/$trackId")({
     const desc = track
       ? `${track.title} by ${track.artist} — stream on neoUNIVERSE${track.has_file ? `, or own the MP3 for $0.50.` : "."}`
       : "Stream neoSHADE tracks on the neoUNIVERSE.";
-    const url = `https://universe.neo-shade.com/tracks/${params.trackId}`;
+    const url = siteUrl(`/tracks/${params.trackId}`);
     return {
       meta: [
         { title },
