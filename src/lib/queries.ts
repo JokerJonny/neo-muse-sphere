@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { youtubeThumb } from "@/lib/format";
 import type { Track, Album, SortMode, YouTubePlaylist } from "@/lib/types";
 
 /**
@@ -130,6 +131,13 @@ export async function fetchTrending(limit = 8): Promise<Track[]> {
   return (data ?? []) as Track[];
 }
 
+/** Official album playlists expose a signed cover-art URL
+ * (`i9.ytimg.com/s_p/…`) that frequently 404s. Detect those so we can fall
+ * back to a track thumbnail that always loads. */
+function isBrokenPlaylistArt(url?: string | null): boolean {
+  return !url || url.includes("/s_p/");
+}
+
 export async function fetchYouTubePlaylists(): Promise<YouTubePlaylist[]> {
   const { data, error } = await supabase
     .from("youtube_playlists")
@@ -138,7 +146,38 @@ export async function fetchYouTubePlaylists(): Promise<YouTubePlaylist[]> {
     .order("sort_order", { ascending: true })
     .order("published_at", { ascending: false, nullsFirst: false });
   if (error) throw error;
-  return data ?? [];
+  const playlists = data ?? [];
+
+  // For releases whose cover art is missing/broken, substitute the first
+  // track's thumbnail (always a reliable i.ytimg.com/vi/… URL).
+  const needsArt = playlists.filter((p) => isBrokenPlaylistArt(p.artwork_url));
+  if (needsArt.length) {
+    const { data: items } = await supabase
+      .from("youtube_playlist_items")
+      .select("playlist_id, youtube_id, artwork_url, position")
+      .in(
+        "playlist_id",
+        needsArt.map((p) => p.id),
+      )
+      .order("position", { ascending: true });
+
+    const firstByPlaylist = new Map<string, string | null>();
+    for (const it of items ?? []) {
+      if (!firstByPlaylist.has(it.playlist_id)) {
+        const thumb = it.artwork_url || youtubeThumb(it.youtube_id, "maxres");
+        firstByPlaylist.set(it.playlist_id, thumb);
+      }
+    }
+
+    for (const p of playlists) {
+      if (isBrokenPlaylistArt(p.artwork_url)) {
+        const fallback = firstByPlaylist.get(p.id);
+        if (fallback) p.artwork_url = fallback;
+      }
+    }
+  }
+
+  return playlists;
 }
 
 export async function fetchPlaylist(id: string): Promise<YouTubePlaylist | null> {
