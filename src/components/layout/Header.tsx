@@ -20,7 +20,8 @@ const NAV = [
   { to: "/albums", label: "Releases" },
   { to: "/playlists", label: "Playlists" },
   { to: "/posts", label: "Posts" },
-  { to: "/catalog", label: "Store" },
+  { to: "/catalog", label: "Music Store" },
+  { to: "/merch", label: "Merch Store" },
 ];
 
 export function Header() {
