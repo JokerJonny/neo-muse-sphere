@@ -131,16 +131,30 @@ function Discover() {
                   : "border-border hover:border-primary/60 hover:shadow-[0_0_30px_-8px_var(--neon-cyan)]",
               )}
             >
-              <div
-                className="pointer-events-none absolute inset-0 opacity-25 transition-opacity duration-300 group-hover:opacity-50"
-                style={{ background: `linear-gradient(135deg, ${v.from}, ${v.to})` }}
-              />
-              <div className="pointer-events-none absolute -right-6 -top-6 text-7xl opacity-20 transition-transform duration-500 group-hover:scale-125 group-hover:opacity-30">
-                {v.emoji}
-              </div>
-              <div className="relative">
-                <span className="text-2xl">{v.emoji}</span>
-                <h3 className="mt-2 font-display text-lg font-bold tracking-wide">{v.label}</h3>
+              {v.image ? (
+                <>
+                  <img
+                    src={v.image}
+                    alt={v.label}
+                    loading="lazy"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70 transition-all duration-500 group-hover:scale-110 group-hover:opacity-90"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/10" />
+                </>
+              ) : (
+                <>
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-25 transition-opacity duration-300 group-hover:opacity-50"
+                    style={{ background: `linear-gradient(135deg, ${v.from}, ${v.to})` }}
+                  />
+                  <div className="pointer-events-none absolute -right-6 -top-6 text-7xl opacity-20 transition-transform duration-500 group-hover:scale-125 group-hover:opacity-30">
+                    {v.emoji}
+                  </div>
+                </>
+              )}
+              <div className={cn("relative", v.image && "flex h-full flex-col justify-end pt-20")}>
+                <span className="text-2xl drop-shadow-lg">{v.emoji}</span>
+                <h3 className="mt-2 font-display text-lg font-bold tracking-wide drop-shadow-lg">{v.label}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">{v.tagline}</p>
                 <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
                   <Play className="h-3 w-3" fill="currentColor" /> Generate & play

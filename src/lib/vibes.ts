@@ -1,4 +1,12 @@
 import type { Track } from "@/lib/types";
+import cinematicImg from "@/assets/vibes/cinematic.jpg.asset.json";
+import healingImg from "@/assets/vibes/healing.jpg.asset.json";
+import lightningImg from "@/assets/vibes/lightning.jpg.asset.json";
+import jazzImg from "@/assets/vibes/jazz.jpg.asset.json";
+import clubImg from "@/assets/vibes/club.jpg.asset.json";
+import reggaeImg from "@/assets/vibes/reggae.jpg.asset.json";
+import rebellionImg from "@/assets/vibes/rebellion.jpg.asset.json";
+import shadowImg from "@/assets/vibes/shadow.jpg.asset.json";
 
 /** A neoVIBE — an emotional/genre lens over the whole neoUNIVERSE catalog. */
 export interface Vibe {
@@ -11,9 +19,12 @@ export interface Vibe {
   from: string;
   to: string;
   emoji: string;
+  /** Optional cover image for the card. */
+  image?: string;
   /** When true, ignores keywords and builds a random emotional journey. */
   random?: boolean;
 }
+
 
 export const VIBES: Vibe[] = [
   {
@@ -21,56 +32,56 @@ export const VIBES: Vibe[] = [
     label: "neoJAZZ",
     tagline: "Smooth, soulful, after-hours",
     keywords: ["jazz", "smooth", "sax", "saxophone", "soul", "blues", "lounge", "swing", "brass", "noir", "mellow", "groove"],
-    from: "#1e3a8a", to: "#7c3aed", emoji: "🎷",
+    from: "#1e3a8a", to: "#7c3aed", emoji: "🎷", image: jazzImg.url,
   },
   {
     id: "club",
     label: "neoCLUB",
     tagline: "Party anthems & high energy",
     keywords: ["club", "party", "dance", "anthem", "boom", "energy", "beat", "drop", "bass", "house", "rave", "banger", "hip hop", "hip-hop", "trap", "drill", "explode", "movement"],
-    from: "#db2777", to: "#06b6d4", emoji: "🪩",
+    from: "#db2777", to: "#06b6d4", emoji: "🪩", image: clubImg.url,
   },
   {
     id: "reggae",
     label: "neoREGGAE",
     tagline: "Island roots & sunshine riddim",
     keywords: ["reggae", "island", "dub", "roots", "caribbean", "jamaica", "riddim", "dancehall", "sunshine", "tropical", "beach", "palm"],
-    from: "#16a34a", to: "#facc15", emoji: "🌴",
+    from: "#16a34a", to: "#facc15", emoji: "🌴", image: reggaeImg.url,
   },
   {
     id: "healing",
     label: "neoHEALING",
     tagline: "Calm, presence & recovery",
     keywords: ["healing", "heal", "calm", "peace", "breathe", "breathing", "meditation", "ambient", "recovery", "restore", "gentle", "presence", "mindful", "soft", "still", "quiet", "rest"],
-    from: "#0d9488", to: "#a3e635", emoji: "🌿",
+    from: "#0d9488", to: "#a3e635", emoji: "🌿", image: healingImg.url,
   },
   {
     id: "rebellion",
     label: "neoREBELLION",
     tagline: "Fight, freedom & uprising",
     keywords: ["rebellion", "rebel", "fight", "freedom", "revolution", "uprising", "defiance", "power", "rise", "riot", "resist", "warrior", "battle", "stand", "war"],
-    from: "#dc2626", to: "#f97316", emoji: "✊",
+    from: "#dc2626", to: "#f97316", emoji: "✊", image: rebellionImg.url,
   },
   {
     id: "cinematic",
     label: "neoCINEMATIC",
     tagline: "Epic scores & sweeping journeys",
     keywords: ["cinematic", "epic", "orchestral", "film", "score", "journey", "imax", "soundtrack", "dramatic", "sweeping", "story", "saga", "ancient", "temple"],
-    from: "#4338ca", to: "#0ea5e9", emoji: "🎬",
+    from: "#4338ca", to: "#0ea5e9", emoji: "🎬", image: cinematicImg.url,
   },
   {
     id: "shadow",
     label: "neoSHADOW",
     tagline: "Dark nights & shadow work",
     keywords: ["shadow", "dark", "darkness", "night", "late night", "monster", "ego", "mask", "fear", "void", "abyss", "noir", "hidden", "demon", "midnight"],
-    from: "#1e1b4b", to: "#6d28d9", emoji: "🌑",
+    from: "#1e1b4b", to: "#6d28d9", emoji: "🌑", image: shadowImg.url,
   },
   {
     id: "lightning",
     label: "neoLIGHTNING",
     tagline: "Thunder, speed & raw power",
     keywords: ["lightning", "thunder", "storm", "electric", "speed", "mach", "afterburner", "fire", "blaze", "charge", "surge", "raptor", "freedom", "explosive"],
-    from: "#0891b2", to: "#facc15", emoji: "⚡",
+    from: "#0891b2", to: "#facc15", emoji: "⚡", image: lightningImg.url,
   },
   {
     id: "africa",
