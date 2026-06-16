@@ -109,7 +109,7 @@ function Index() {
         <Section title="Featured Videos" href="/videos">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredVideos.map((t) => (
-              <button key={t.id} onClick={() => openVideo(t)} className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]">
+              <button key={t.id} onClick={() => openVideo(t)} aria-label={`Play video: ${t.title}`} className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]">
                 <div className="relative aspect-video overflow-hidden bg-secondary">
                   <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-90" />
@@ -136,7 +136,7 @@ function Index() {
         <Section title="Trending in neoUNIVERSE" href="/videos" icon={<Flame className="h-5 w-5 text-accent" />}>
           <div className="grid gap-3 sm:grid-cols-2">
             {trending.data.map((t, i) => (
-              <button key={t.id} onClick={() => openVideo(t)} className="group flex items-center gap-4 rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-accent/60">
+              <button key={t.id} onClick={() => openVideo(t)} aria-label={`Play video: ${t.title}`} className="group flex items-center gap-4 rounded-xl border border-border bg-card p-3 text-left transition-colors hover:border-accent/60">
                 <span className="w-6 shrink-0 text-center font-display text-xl font-black text-muted-foreground">{i + 1}</span>
                 <div className="relative aspect-video w-32 shrink-0 overflow-hidden rounded-lg bg-secondary">
                   <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover" />
