@@ -32,7 +32,7 @@ export const VIBES: Vibe[] = [
     label: "neoJAZZ",
     tagline: "Smooth, soulful, after-hours",
     keywords: ["jazz", "smooth", "sax", "saxophone", "soul", "blues", "lounge", "swing", "brass", "noir", "mellow", "groove"],
-    from: "#1e3a8a", to: "#7c3aed", emoji: "🎷",
+    from: "#1e3a8a", to: "#7c3aed", emoji: "🎷", image: jazzImg.url,
   },
   {
     id: "club",
