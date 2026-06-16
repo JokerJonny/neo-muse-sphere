@@ -8,6 +8,7 @@ import { youtubeThumb, formatDuration, formatViews, timeAgo } from "@/lib/format
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 import { SortFilter } from "@/components/SortFilter";
 import type { Track, SortMode } from "@/lib/types";
+import { siteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/videos")({
   loader: () => fetchVideos("newest"),
