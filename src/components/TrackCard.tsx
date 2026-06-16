@@ -1,4 +1,5 @@
 import { Play, Pause, ShoppingCart, Youtube, Check } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { Track } from "@/lib/types";
 import { usePlayer } from "@/hooks/use-player";
 import { useCart } from "@/hooks/use-cart";
