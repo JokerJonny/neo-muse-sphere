@@ -19,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AlbumsRouteImport } from './routes/albums'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlaylistsIndexRouteImport } from './routes/playlists.index'
 import { Route as TracksTrackIdRouteImport } from './routes/tracks.$trackId'
 import { Route as PlaylistsPlaylistIdRouteImport } from './routes/playlists.$playlistId'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
@@ -73,6 +74,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaylistsIndexRoute = PlaylistsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlaylistsRoute,
+} as any)
 const TracksTrackIdRoute = TracksTrackIdRouteImport.update({
   id: '/tracks/$trackId',
   path: '/tracks/$trackId',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof AuthenticatedLibraryRoute
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists/': typeof PlaylistsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -115,7 +122,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
@@ -123,6 +129,7 @@ export interface FileRoutesByTo {
   '/library': typeof AuthenticatedLibraryRoute
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists': typeof PlaylistsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists/': typeof PlaylistsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -157,6 +165,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -164,7 +173,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
-    | '/playlists'
     | '/posts'
     | '/shorts'
     | '/videos'
@@ -172,6 +180,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists'
   id:
     | '__root__'
     | '/'
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/_authenticated/library'
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -276,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playlists/': {
+      id: '/playlists/'
+      path: '/'
+      fullPath: '/playlists/'
+      preLoaderRoute: typeof PlaylistsIndexRouteImport
+      parentRoute: typeof PlaylistsRoute
+    }
     '/tracks/$trackId': {
       id: '/tracks/$trackId'
       path: '/tracks/$trackId'
@@ -322,10 +339,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface PlaylistsRouteChildren {
   PlaylistsPlaylistIdRoute: typeof PlaylistsPlaylistIdRoute
+  PlaylistsIndexRoute: typeof PlaylistsIndexRoute
 }
 
 const PlaylistsRouteChildren: PlaylistsRouteChildren = {
   PlaylistsPlaylistIdRoute: PlaylistsPlaylistIdRoute,
+  PlaylistsIndexRoute: PlaylistsIndexRoute,
 }
 
 const PlaylistsRouteWithChildren = PlaylistsRoute._addFileChildren(
