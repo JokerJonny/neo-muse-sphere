@@ -97,6 +97,7 @@ function Shorts() {
           <button
             key={t.id}
             onClick={() => open(t)}
+            aria-label={`Play short: ${t.title}`}
             className="group relative overflow-hidden rounded-2xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/70 hover:shadow-[var(--shadow-neon)]"
           >
             <div className="relative aspect-[9/16] overflow-hidden bg-secondary">
