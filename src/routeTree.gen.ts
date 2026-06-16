@@ -10,19 +10,39 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as ShortsRouteImport } from './routes/shorts'
+import { Route as PostsRouteImport } from './routes/posts'
+import { Route as PlaylistsRouteImport } from './routes/playlists'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AlbumsRouteImport } from './routes/albums'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlaylistsIndexRouteImport } from './routes/playlists.index'
 import { Route as TracksTrackIdRouteImport } from './routes/tracks.$trackId'
+import { Route as PlaylistsPlaylistIdRouteImport } from './routes/playlists.$playlistId'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShortsRoute = ShortsRouteImport.update({
+  id: '/shorts',
+  path: '/shorts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostsRoute = PostsRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlaylistsRoute = PlaylistsRouteImport.update({
+  id: '/playlists',
+  path: '/playlists',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogRoute = CatalogRouteImport.update({
@@ -54,10 +74,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaylistsIndexRoute = PlaylistsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlaylistsRoute,
+} as any)
 const TracksTrackIdRoute = TracksTrackIdRouteImport.update({
   id: '/tracks/$trackId',
   path: '/tracks/$trackId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PlaylistsPlaylistIdRoute = PlaylistsPlaylistIdRouteImport.update({
+  id: '/$playlistId',
+  path: '/$playlistId',
+  getParentRoute: () => PlaylistsRoute,
 } as any)
 const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
   id: '/library',
@@ -76,10 +106,15 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/playlists': typeof PlaylistsRouteWithChildren
+  '/posts': typeof PostsRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists/': typeof PlaylistsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -87,10 +122,14 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/posts': typeof PostsRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists': typeof PlaylistsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -100,10 +139,15 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/playlists': typeof PlaylistsRouteWithChildren
+  '/posts': typeof PostsRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
+  '/playlists/': typeof PlaylistsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,10 +157,15 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/playlists'
+    | '/posts'
+    | '/shorts'
     | '/videos'
     | '/admin'
     | '/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -124,10 +173,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/posts'
+    | '/shorts'
     | '/videos'
     | '/admin'
     | '/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists'
   id:
     | '__root__'
     | '/'
@@ -136,10 +189,15 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/playlists'
+    | '/posts'
+    | '/shorts'
     | '/videos'
     | '/_authenticated/admin'
     | '/_authenticated/library'
+    | '/playlists/$playlistId'
     | '/tracks/$trackId'
+    | '/playlists/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -149,6 +207,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
+  PlaylistsRoute: typeof PlaylistsRouteWithChildren
+  PostsRoute: typeof PostsRoute
+  ShortsRoute: typeof ShortsRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
 }
@@ -160,6 +221,27 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shorts': {
+      id: '/shorts'
+      path: '/shorts'
+      fullPath: '/shorts'
+      preLoaderRoute: typeof ShortsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/posts': {
+      id: '/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/playlists': {
+      id: '/playlists'
+      path: '/playlists'
+      fullPath: '/playlists'
+      preLoaderRoute: typeof PlaylistsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalog': {
@@ -204,12 +286,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playlists/': {
+      id: '/playlists/'
+      path: '/'
+      fullPath: '/playlists/'
+      preLoaderRoute: typeof PlaylistsIndexRouteImport
+      parentRoute: typeof PlaylistsRoute
+    }
     '/tracks/$trackId': {
       id: '/tracks/$trackId'
       path: '/tracks/$trackId'
       fullPath: '/tracks/$trackId'
       preLoaderRoute: typeof TracksTrackIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/playlists/$playlistId': {
+      id: '/playlists/$playlistId'
+      path: '/$playlistId'
+      fullPath: '/playlists/$playlistId'
+      preLoaderRoute: typeof PlaylistsPlaylistIdRouteImport
+      parentRoute: typeof PlaylistsRoute
     }
     '/_authenticated/library': {
       id: '/_authenticated/library'
@@ -241,6 +337,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PlaylistsRouteChildren {
+  PlaylistsPlaylistIdRoute: typeof PlaylistsPlaylistIdRoute
+  PlaylistsIndexRoute: typeof PlaylistsIndexRoute
+}
+
+const PlaylistsRouteChildren: PlaylistsRouteChildren = {
+  PlaylistsPlaylistIdRoute: PlaylistsPlaylistIdRoute,
+  PlaylistsIndexRoute: PlaylistsIndexRoute,
+}
+
+const PlaylistsRouteWithChildren = PlaylistsRoute._addFileChildren(
+  PlaylistsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -248,6 +358,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
+  PlaylistsRoute: PlaylistsRouteWithChildren,
+  PostsRoute: PostsRoute,
+  ShortsRoute: ShortsRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
 }

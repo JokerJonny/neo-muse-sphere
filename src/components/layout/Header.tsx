@@ -15,9 +15,12 @@ import {
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/catalog", label: "Catalog" },
   { to: "/videos", label: "Videos" },
-  { to: "/albums", label: "Albums" },
+  { to: "/shorts", label: "Shorts" },
+  { to: "/albums", label: "Releases" },
+  { to: "/playlists", label: "Playlists" },
+  { to: "/posts", label: "Posts" },
+  { to: "/catalog", label: "Store" },
 ];
 
 export function Header() {

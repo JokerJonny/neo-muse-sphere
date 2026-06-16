@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function Admin() {
   const { isAdmin, loading } = useAuth();
-  const { data: videos } = useQuery({ queryKey: ["videos"], queryFn: fetchVideos });
+  const { data: videos } = useQuery({ queryKey: ["videos", "newest"], queryFn: () => fetchVideos() });
   const { data: tracks } = useQuery({ queryKey: ["tracks"], queryFn: () => fetchTracks() });
 
   if (loading) {
