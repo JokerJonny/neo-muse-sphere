@@ -231,8 +231,8 @@ export type Database = {
           created_at: string
           currency: string
           id: string
+          paypal_order_id: string | null
           status: string
-          stripe_session_id: string | null
           track_id: string
           user_id: string
         }
@@ -241,8 +241,8 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          paypal_order_id?: string | null
           status?: string
-          stripe_session_id?: string | null
           track_id: string
           user_id: string
         }
@@ -251,8 +251,8 @@ export type Database = {
           created_at?: string
           currency?: string
           id?: string
+          paypal_order_id?: string | null
           status?: string
-          stripe_session_id?: string | null
           track_id?: string
           user_id?: string
         }
