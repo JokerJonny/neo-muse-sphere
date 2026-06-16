@@ -13,7 +13,7 @@ const TRACK_COLUMNS =
 async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track[]> {
   let q = supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("is_short", isShort)
     .not("youtube_id", "is", null);
@@ -42,7 +42,7 @@ export async function fetchTracks(opts?: {
 }): Promise<Track[]> {
   let q = supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
@@ -63,7 +63,7 @@ export async function fetchTracks(opts?: {
 export async function fetchCatalogForVibes(): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .order("view_count", { ascending: false, nullsFirst: false })
     .limit(1000);
@@ -74,7 +74,7 @@ export async function fetchCatalogForVibes(): Promise<Track[]> {
 export async function fetchFeaturedTracks(): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("featured", true)
     .limit(8);
@@ -85,7 +85,7 @@ export async function fetchFeaturedTracks(): Promise<Track[]> {
 export async function fetchLatestTracks(limit = 6): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("is_short", false)
     .order("published_at", { ascending: false, nullsFirst: false })
@@ -121,7 +121,7 @@ export async function fetchShorts(sort: SortMode = "newest"): Promise<Track[]> {
 export async function fetchTrending(limit = 8): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .not("youtube_id", "is", null)
     .order("view_count", { ascending: false })
@@ -205,7 +205,7 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
   const ids = validItems.map((i) => i.youtube_id);
   const { data: tracks, error: tErr } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .in("youtube_id", ids)
     .eq("is_published", true);
   if (tErr) throw tErr;
@@ -224,7 +224,7 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
 export async function fetchTrack(id: string): Promise<Track | null> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
