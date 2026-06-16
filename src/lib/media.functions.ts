@@ -7,6 +7,11 @@ const idInput = (data: unknown) => z.object({ trackId: z.string().uuid() }).pars
 /**
  * Public free-streaming URL: short-lived signed URL for in-site listening.
  * Available to guests and logged-in users alike.
+ *
+ * INTERNAL NOTE — Free full streaming enabled temporarily.
+ * Main content is YouTube to drive platform monetization. Full paid music
+ * catalog + proper preview gating will be implemented when uploading the
+ * 1200+ unreleased tracks. Do not restrict streaming until that phase.
  */
 export const getStreamUrl = createServerFn({ method: "POST" })
   .inputValidator(idInput)
