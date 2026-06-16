@@ -30,7 +30,7 @@ export function VideoOverlay() {
       >
         <iframe
           className="h-full w-full"
-          src={`https://www.youtube.com/embed/${p.current.youtube_id}?autoplay=1&rel=0&playsinline=1`}
+          src={embedSrc}
           title={p.current.title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
