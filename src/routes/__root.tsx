@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "neoUNIVERSE the official immersive cyberpunk portal for neoSHADE. Music · Video · Lore from the neon dark. Stream cinematic releases, explore emotional journeys" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@neoSHADE" },
       { name: "twitter:title", content: "neoUNIVERSE: Music · Video · Lore" },
       { name: "twitter:description", content: "neoUNIVERSE the official immersive cyberpunk portal for neoSHADE. Music · Video · Lore from the neon dark. Stream cinematic releases, explore emotional journeys" },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9xf40gVFkPhn0yJxhAa2RnpQNjx1/social-images/social-1781610749283-facebook_basnner_june_206.webp" },
