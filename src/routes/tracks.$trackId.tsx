@@ -75,7 +75,7 @@ function TrackPage() {
   const art = track.artwork_url || youtubeThumb(track.youtube_id);
   const isCurrent = current?.id === track.id;
   const inCart = cart.has(track.id);
-  const canBuy = track.is_purchasable && !!track.file_path;
+  const canBuy = track.is_purchasable && track.has_file;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">

@@ -85,7 +85,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (!track.file_path && !track.preview_url) {
+    if (!track.has_file && !track.preview_url) {
       // YouTube/Spotify-only track: open the video experience.
       setVideoOpen(!!track.youtube_id);
       setIsPlaying(false);
@@ -95,7 +95,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setLoadingTrack(true);
     try {
       let src = track.preview_url ?? null;
-      if (track.file_path) {
+      if (track.has_file) {
         const res = await getStreamUrl({ data: { trackId: track.id } });
         src = res.url ?? src;
       }
@@ -146,7 +146,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio || !current) return;
-    if (!current.file_path && !current.preview_url) {
+    if (!current.has_file && !current.preview_url) {
       setVideoOpen(true);
       return;
     }

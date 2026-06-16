@@ -21,7 +21,7 @@ export function PlayerBar() {
   if (!p.current) return null;
   const t = p.current;
   const art = t.artwork_url || youtubeThumb(t.youtube_id);
-  const isVideoOnly = !t.file_path && !t.preview_url;
+  const isVideoOnly = !t.has_file && !t.preview_url;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 glass">
