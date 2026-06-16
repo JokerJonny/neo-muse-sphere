@@ -22,7 +22,7 @@ export function SyncYouTubeButton({ className }: { className?: string }) {
       const res = await sync({});
       await qc.invalidateQueries();
       toast.success(
-        `Synced ${res.total} videos — ${res.added} new, ${res.updated} updated.`,
+        `Synced ${res.total} videos (${res.videos} long-form, ${res.shorts} shorts) + ${res.playlists} playlists — ${res.added} new, ${res.updated} updated.`,
         { id: t },
       );
     } catch (e) {
