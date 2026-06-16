@@ -1,6 +1,15 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Track, Album, SortMode, YouTubePlaylist } from "@/lib/types";
 
+/**
+ * Public-safe column list for tracks. The private storage path (`file_path`)
+ * is intentionally excluded — clients only need the `has_file` indicator to
+ * know whether a track is downloadable. The real path is read server-side
+ * (via the admin client) when generating signed stream/download URLs.
+ */
+const TRACK_COLUMNS =
+  "id,title,slug,artist,album_id,duration_seconds,genres,youtube_id,spotify_id,source,preview_url,artwork_url,description,price_cents,is_purchasable,is_published,plays,featured,sort_order,created_at,updated_at,is_short,view_count,like_count,published_at,has_file";
+
 async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track[]> {
   let q = supabase
     .from("tracks")
