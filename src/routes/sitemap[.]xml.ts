@@ -38,6 +38,7 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const BASE_URL = resolveBaseUrl();
         const entries: SitemapEntry[] = [...STATIC_ENTRIES];
 
         try {
