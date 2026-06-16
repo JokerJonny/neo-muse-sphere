@@ -86,29 +86,14 @@ export async function fetchAlbums(): Promise<Album[]> {
 
 /** Long-form videos only (excludes Shorts). */
 export async function fetchVideos(sort: SortMode = "newest"): Promise<Track[]> {
-  const q = supabase
-    .from("tracks")
-    .select("*")
-    .eq("is_published", true)
-    .eq("is_short", false)
-    .not("youtube_id", "is", null);
-  const { data, error } = await applySort(q, sort);
-  if (error) throw error;
-  return data ?? [];
+  return fetchVideoTracks(false, sort);
 }
 
 /** Vertical Shorts only. */
 export async function fetchShorts(sort: SortMode = "newest"): Promise<Track[]> {
-  const q = supabase
-    .from("tracks")
-    .select("*")
-    .eq("is_published", true)
-    .eq("is_short", true)
-    .not("youtube_id", "is", null);
-  const { data, error } = await applySort(q, sort);
-  if (error) throw error;
-  return data ?? [];
+  return fetchVideoTracks(true, sort);
 }
+
 
 /** Most-viewed videos in the neoUNIVERSE. */
 export async function fetchTrending(limit = 8): Promise<Track[]> {
