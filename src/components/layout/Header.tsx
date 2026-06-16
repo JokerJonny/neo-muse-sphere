@@ -136,6 +136,15 @@ export function Header() {
               <Disc3 className="h-4 w-4" /> {n.label}
             </Link>
           ))}
+          <a
+            href={BRAND.site}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="mt-2 flex items-center justify-center gap-2 rounded-md border border-neon-cyan/40 bg-card/50 px-4 py-2.5 text-sm font-semibold tracking-wide text-neon-cyan shadow-[var(--shadow-neon)]"
+          >
+            ← neo-shade.com
+          </a>
           {!user && (
             <Link
               to="/auth"
