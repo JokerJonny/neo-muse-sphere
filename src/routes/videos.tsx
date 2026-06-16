@@ -65,9 +65,10 @@ function Videos() {
       </div>
       {isLoading && <p className="mt-8 text-center text-muted-foreground">Loading…</p>}
       {!isLoading && !data?.length && (
-        <p className="mt-12 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
-          No videos yet. Sync from YouTube in the admin panel.
-        </p>
+        <div className="mt-12 flex flex-col items-center gap-4 rounded-xl border border-dashed border-border p-10 text-center">
+          <p className="text-muted-foreground">No videos yet. Sync the @NeoShade-AI channel to import them.</p>
+          <SyncYouTubeButton />
+        </div>
       )}
     </div>
   );
