@@ -34,12 +34,22 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 glass">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex items-center gap-2.5">
-          <img src={logo} alt="neoSHADE logo" width={36} height={36} className="h-9 w-9" />
-          <span className="font-display text-lg font-bold tracking-wider text-gradient">
-            {BRAND.name}
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src={logo} alt="neoSHADE logo" width={36} height={36} className="h-9 w-9" />
+            <span className="font-display text-lg font-bold tracking-wider text-gradient">
+              {BRAND.name}
+            </span>
+          </Link>
+          <a
+            href={BRAND.site}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden items-center rounded-md border border-neon-cyan/40 bg-card/50 px-3 py-1.5 text-xs font-semibold tracking-wide text-neon-cyan shadow-[var(--shadow-neon)] transition-transform hover:scale-105 lg:inline-flex"
+          >
+            ← neo-shade.com
+          </a>
+        </div>
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => (
@@ -126,6 +136,15 @@ export function Header() {
               <Disc3 className="h-4 w-4" /> {n.label}
             </Link>
           ))}
+          <a
+            href={BRAND.site}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="mt-2 flex items-center justify-center gap-2 rounded-md border border-neon-cyan/40 bg-card/50 px-4 py-2.5 text-sm font-semibold tracking-wide text-neon-cyan shadow-[var(--shadow-neon)]"
+          >
+            ← neo-shade.com
+          </a>
           {!user && (
             <Link
               to="/auth"
