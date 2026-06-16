@@ -14,16 +14,374 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      albums: {
+        Row: {
+          artwork_url: string | null
+          created_at: string
+          description: string | null
+          external_url: string | null
+          id: string
+          is_published: boolean
+          release_date: string | null
+          slug: string | null
+          sort_order: number
+          spotify_id: string | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          is_published?: boolean
+          release_date?: string | null
+          slug?: string | null
+          sort_order?: number
+          spotify_id?: string | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          id?: string
+          is_published?: boolean
+          release_date?: string | null
+          slug?: string | null
+          sort_order?: number
+          spotify_id?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      cart_items: {
+        Row: {
+          created_at: string
+          id: string
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_items_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlist_tracks: {
+        Row: {
+          added_at: string
+          id: string
+          playlist_id: string
+          position: number
+          track_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          playlist_id: string
+          position?: number
+          track_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          playlist_id?: string
+          position?: number
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_tracks_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_tracks_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          created_at: string
+          id: string
+          is_public: boolean
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          id: string
+          status: string
+          stripe_session_id: string | null
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          stripe_session_id?: string | null
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          stripe_session_id?: string | null
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracks: {
+        Row: {
+          album_id: string | null
+          artist: string
+          artwork_url: string | null
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          featured: boolean
+          file_path: string | null
+          genres: string[]
+          id: string
+          is_published: boolean
+          is_purchasable: boolean
+          plays: number
+          preview_url: string | null
+          price_cents: number
+          slug: string | null
+          sort_order: number
+          source: string
+          spotify_id: string | null
+          title: string
+          updated_at: string
+          youtube_id: string | null
+        }
+        Insert: {
+          album_id?: string | null
+          artist?: string
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          featured?: boolean
+          file_path?: string | null
+          genres?: string[]
+          id?: string
+          is_published?: boolean
+          is_purchasable?: boolean
+          plays?: number
+          preview_url?: string | null
+          price_cents?: number
+          slug?: string | null
+          sort_order?: number
+          source?: string
+          spotify_id?: string | null
+          title: string
+          updated_at?: string
+          youtube_id?: string | null
+        }
+        Update: {
+          album_id?: string | null
+          artist?: string
+          artwork_url?: string | null
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          featured?: boolean
+          file_path?: string | null
+          genres?: string[]
+          id?: string
+          is_published?: boolean
+          is_purchasable?: boolean
+          plays?: number
+          preview_url?: string | null
+          price_cents?: number
+          slug?: string | null
+          sort_order?: number
+          source?: string
+          spotify_id?: string | null
+          title?: string
+          updated_at?: string
+          youtube_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracks_album_id_fkey"
+            columns: ["album_id"]
+            isOneToOne: false
+            referencedRelation: "albums"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +508,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
