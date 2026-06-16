@@ -277,6 +277,7 @@ export type Database = {
           featured: boolean
           file_path: string | null
           genres: string[]
+          has_file: boolean | null
           id: string
           is_published: boolean
           is_purchasable: boolean
@@ -305,6 +306,7 @@ export type Database = {
           featured?: boolean
           file_path?: string | null
           genres?: string[]
+          has_file?: boolean | null
           id?: string
           is_published?: boolean
           is_purchasable?: boolean
@@ -333,6 +335,7 @@ export type Database = {
           featured?: boolean
           file_path?: string | null
           genres?: string[]
+          has_file?: boolean | null
           id?: string
           is_published?: boolean
           is_purchasable?: boolean
