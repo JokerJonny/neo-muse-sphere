@@ -1,12 +1,17 @@
 import type { Track } from "@/lib/types";
+import africaImg from "@/assets/vibes/africa.jpg.asset.json";
 import cinematicImg from "@/assets/vibes/cinematic.jpg.asset.json";
 import healingImg from "@/assets/vibes/healing.jpg.asset.json";
 import lightningImg from "@/assets/vibes/lightning.jpg.asset.json";
+import loveImg from "@/assets/vibes/love.jpg.asset.json";
 import jazzImg from "@/assets/vibes/jazz.jpg.asset.json";
 import clubImg from "@/assets/vibes/club.jpg.asset.json";
+import patriotImg from "@/assets/vibes/patriot.jpg.asset.json";
 import reggaeImg from "@/assets/vibes/reggae.jpg.asset.json";
 import rebellionImg from "@/assets/vibes/rebellion.jpg.asset.json";
 import shadowImg from "@/assets/vibes/shadow.jpg.asset.json";
+import spiritImg from "@/assets/vibes/spirit.jpg.asset.json";
+import surpriseImg from "@/assets/vibes/surprise.jpg.asset.json";
 
 /** A neoVIBE — an emotional/genre lens over the whole neoUNIVERSE catalog. */
 export interface Vibe {
@@ -88,35 +93,35 @@ export const VIBES: Vibe[] = [
     label: "neoAFRICA",
     tagline: "Desert, savanna & world rhythms",
     keywords: ["africa", "desert", "savanna", "tribal", "world", "egypt", "sands", "rainforest", "ancestral", "drum"],
-    from: "#b45309", to: "#ea580c", emoji: "🌍",
+    from: "#b45309", to: "#ea580c", emoji: "🌍", image: africaImg.url,
   },
   {
     id: "spirit",
     label: "neoSPIRIT",
     tagline: "Faith, redemption & the sacred",
     keywords: ["spirit", "god", "gospel", "faith", "prayer", "sacred", "redemption", "soul", "ancient", "divine", "heaven", "transformation", "rebirth"],
-    from: "#7c2d12", to: "#fbbf24", emoji: "🕊️",
+    from: "#7c2d12", to: "#fbbf24", emoji: "🕊️", image: spiritImg.url,
   },
   {
     id: "love",
     label: "neoLOVE",
     tagline: "Romance, longing & late-night hearts",
     keywords: ["love", "heart", "romance", "she", "her", "waited", "longing", "kiss", "tender", "forever", "together"],
-    from: "#be185d", to: "#a855f7", emoji: "💜",
+    from: "#be185d", to: "#a855f7", emoji: "💜", image: loveImg.url,
   },
   {
     id: "patriot",
     label: "neoPATRIOT",
     tagline: "Liberty, country & the brave",
     keywords: ["america", "american", "freedom", "liberty", "soldier", "flag", "patriot", "usa", "military", "veteran", "anthem", "brave"],
-    from: "#1d4ed8", to: "#dc2626", emoji: "🇺🇸",
+    from: "#1d4ed8", to: "#dc2626", emoji: "🇺🇸", image: patriotImg.url,
   },
   {
     id: "surprise",
     label: "Surprise Me",
     tagline: "A random emotional journey",
     keywords: [],
-    from: "#7c3aed", to: "#06b6d4", emoji: "✨",
+    from: "#7c3aed", to: "#06b6d4", emoji: "✨", image: surpriseImg.url,
     random: true,
   },
 ];
