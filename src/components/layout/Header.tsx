@@ -21,7 +21,6 @@ const NAV = [
   { to: "/playlists", label: "Playlists" },
   { to: "/posts", label: "Posts" },
   { to: "/catalog", label: "Store" },
-  { to: "/merch", label: "Merch" },
 ];
 
 export function Header() {

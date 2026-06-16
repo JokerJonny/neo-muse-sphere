@@ -13,7 +13,6 @@ import { Route as VideosRouteImport } from './routes/videos'
 import { Route as ShortsRouteImport } from './routes/shorts'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as PlaylistsRouteImport } from './routes/playlists'
-import { Route as MerchRouteImport } from './routes/merch'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -44,11 +43,6 @@ const PostsRoute = PostsRouteImport.update({
 const PlaylistsRoute = PlaylistsRouteImport.update({
   id: '/playlists',
   path: '/playlists',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MerchRoute = MerchRouteImport.update({
-  id: '/merch',
-  path: '/merch',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogRoute = CatalogRouteImport.update({
@@ -112,7 +106,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/merch': typeof MerchRoute
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
@@ -129,7 +122,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/merch': typeof MerchRoute
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
@@ -147,7 +139,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
-  '/merch': typeof MerchRoute
   '/playlists': typeof PlaylistsRouteWithChildren
   '/posts': typeof PostsRoute
   '/shorts': typeof ShortsRoute
@@ -166,7 +157,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
-    | '/merch'
     | '/playlists'
     | '/posts'
     | '/shorts'
@@ -183,7 +173,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
-    | '/merch'
     | '/posts'
     | '/shorts'
     | '/videos'
@@ -200,7 +189,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
-    | '/merch'
     | '/playlists'
     | '/posts'
     | '/shorts'
@@ -219,7 +207,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
-  MerchRoute: typeof MerchRoute
   PlaylistsRoute: typeof PlaylistsRouteWithChildren
   PostsRoute: typeof PostsRoute
   ShortsRoute: typeof ShortsRoute
@@ -255,13 +242,6 @@ declare module '@tanstack/react-router' {
       path: '/playlists'
       fullPath: '/playlists'
       preLoaderRoute: typeof PlaylistsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/merch': {
-      id: '/merch'
-      path: '/merch'
-      fullPath: '/merch'
-      preLoaderRoute: typeof MerchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalog': {
@@ -378,7 +358,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
-  MerchRoute: MerchRoute,
   PlaylistsRoute: PlaylistsRouteWithChildren,
   PostsRoute: PostsRoute,
   ShortsRoute: ShortsRoute,
