@@ -44,9 +44,8 @@ function buildYouTubeEmbedPage({
   const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
   const safeTitle = escapeHtml(title);
 
-  // Clean proxy embed: a plain YouTube iframe served from our own origin.
-  // youtube-nocookie.com + an explicit origin param reduces (but cannot fully
-  // eliminate) YouTube's bot challenge, which is enforced by source IP.
+  // Plain official YouTube embed served from our own origin, with an explicit
+  // origin param. This is the minimal, most-compatible embed method.
   const embedParams = new URLSearchParams({
     autoplay: String(autoplay),
     rel: "0",
@@ -55,7 +54,7 @@ function buildYouTubeEmbedPage({
     iv_load_policy: "3",
     origin,
   });
-  const embedSrc = `https://www.youtube-nocookie.com/embed/${videoId}?${embedParams.toString()}`;
+  const embedSrc = `https://www.youtube.com/embed/${videoId}?${embedParams.toString()}`;
 
   return `<!doctype html>
 <html lang="en">
