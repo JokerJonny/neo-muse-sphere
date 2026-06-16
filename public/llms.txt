@@ -1,0 +1,17 @@
+# neoSHADE · neoUNIVERSE
+
+> The official hub for neoSHADE (NeoShade-AI) — a surreal cyberpunk audiovisual project. Stream cinematic music and videos, explore albums and playlists, discover tracks by vibe, and own MP3 downloads for $0.50.
+
+neoSHADE creates IMAX-scale cinematic soundscapes forged in the neon dark. The neoUNIVERSE is the living hub for every release, music video, Short, and emotional journey.
+
+## Pages
+- [Home](/): Featured videos, trending releases, and the latest neoSHADE drops.
+- [Music Store](/catalog): Browse and stream the full catalog; own any track for $0.50 via PayPal.
+- [neoVIBES Discover](/discover): Search a mood, genre or feeling and get a curated playlist from the whole catalog.
+- [Videos](/videos): Cinematic neoSHADE music videos in full-screen.
+- [Shorts](/shorts): Vertical cinematic transmissions.
+- [Releases & Albums](/albums): Full album playlists and official releases.
+- [Playlists](/playlists): Curated collections from the neoUNIVERSE.
+
+## Optional
+- [Merch Store](/merch): Physical neoSHADE merch (separate Printify store).
