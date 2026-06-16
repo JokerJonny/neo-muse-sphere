@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
+import { Route as ShortsRouteImport } from './routes/shorts'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -23,6 +24,11 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
   path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShortsRoute = ShortsRouteImport.update({
+  id: '/shorts',
+  path: '/shorts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogRoute = CatalogRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/library': typeof AuthenticatedLibraryRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
+  '/shorts': typeof ShortsRoute
   '/videos': typeof VideosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/library': typeof AuthenticatedLibraryRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/shorts'
     | '/videos'
     | '/admin'
     | '/library'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/shorts'
     | '/videos'
     | '/admin'
     | '/library'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/cart'
     | '/catalog'
+    | '/shorts'
     | '/videos'
     | '/_authenticated/admin'
     | '/_authenticated/library'
@@ -149,6 +161,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
+  ShortsRoute: typeof ShortsRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
 }
@@ -160,6 +173,13 @@ declare module '@tanstack/react-router' {
       path: '/videos'
       fullPath: '/videos'
       preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shorts': {
+      id: '/shorts'
+      path: '/shorts'
+      fullPath: '/shorts'
+      preLoaderRoute: typeof ShortsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalog': {
@@ -248,6 +268,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
+  ShortsRoute: ShortsRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
 }
