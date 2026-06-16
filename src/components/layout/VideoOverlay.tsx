@@ -1,18 +1,87 @@
-import { X, ExternalLink } from "lucide-react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
+import { X, ExternalLink, RefreshCw, AlertTriangle } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { cn } from "@/lib/utils";
 
+type PlayerStatus = "loading" | "ready" | "playing" | "slow" | "error";
+
+const EMBED_MESSAGE_SOURCE = "neo-universe-youtube-embed";
+
+function openOfficialYouTube(event: MouseEvent<HTMLAnchorElement>, videoId: string, watchUrl: string) {
+  event.preventDefault();
+  if (typeof window === "undefined") return;
+
+  const ua = window.navigator.userAgent;
+  if (/Android/i.test(ua)) {
+    window.location.href = `intent://www.youtube.com/watch?v=${videoId}#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=${encodeURIComponent(watchUrl)};end`;
+    return;
+  }
+
+  if (/iPad|iPhone|iPod/i.test(ua)) {
+    window.location.href = `youtube://www.youtube.com/watch?v=${videoId}`;
+    window.setTimeout(() => {
+      window.location.href = watchUrl;
+    }, 700);
+    return;
+  }
+
+  const opened = window.open(watchUrl, "_blank", "noopener,noreferrer");
+  if (!opened) window.location.href = watchUrl;
+}
+
 export function VideoOverlay() {
   const p = usePlayer();
+  const [retryNonce, setRetryNonce] = useState(0);
+  const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("loading");
   if (!p.videoOpen || !p.current?.youtube_id) return null;
 
+  const videoId = p.current.youtube_id;
   const isShort = p.current.is_short;
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const embedSrc =
-    `https://www.youtube-nocookie.com/embed/${p.current.youtube_id}` +
-    `?autoplay=1&rel=0&playsinline=1&modestbranding=1` +
-    (origin ? `&origin=${encodeURIComponent(origin)}` : "");
-  const watchUrl = `https://www.youtube.com/watch?v=${p.current.youtube_id}`;
+  const embedSrc = useMemo(() => {
+    const params = new URLSearchParams({
+      autoplay: "1",
+      rel: "0",
+      modestbranding: "1",
+      playsinline: "1",
+      title: p.current?.title ?? "neoSHADE video",
+      short: isShort ? "1" : "0",
+      r: String(retryNonce),
+    });
+    return `/embed/youtube/${encodeURIComponent(videoId)}?${params.toString()}`;
+  }, [isShort, p.current?.title, retryNonce, videoId]);
+  const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  useEffect(() => {
+    setPlayerStatus("loading");
+
+    const slowTimer = window.setTimeout(() => {
+      setPlayerStatus((status) => (status === "loading" ? "slow" : status));
+    }, 9000);
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      const data = event.data as { source?: string; type?: string; videoId?: string };
+      if (!data || data.source !== EMBED_MESSAGE_SOURCE || data.videoId !== videoId) return;
+
+      if (data.type === "ready") setPlayerStatus("ready");
+      if (data.type === "playing") setPlayerStatus("playing");
+      if (data.type === "slow") setPlayerStatus((status) => (status === "loading" ? "slow" : status));
+      if (data.type === "error") setPlayerStatus("error");
+    };
+
+    window.addEventListener("message", onMessage);
+    return () => {
+      window.clearTimeout(slowTimer);
+      window.removeEventListener("message", onMessage);
+    };
+  }, [retryNonce, videoId]);
+
+  const retry = () => {
+    setPlayerStatus("loading");
+    setRetryNonce((value) => value + 1);
+  };
+
+  const hasPlaybackIssue = playerStatus === "slow" || playerStatus === "error";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 p-4 backdrop-blur-xl">
@@ -34,19 +103,47 @@ export function VideoOverlay() {
             className="h-full w-full"
             src={embedSrc}
             title={p.current.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            referrerPolicy="origin-when-cross-origin"
           />
+          {hasPlaybackIssue && (
+            <div className="absolute inset-x-3 bottom-3 rounded-lg border border-border bg-background/90 p-3 backdrop-blur-md">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <AlertTriangle className="h-4 w-4 text-accent" />
+                  {playerStatus === "error" ? "YouTube blocked this embedded player." : "YouTube is taking longer than expected."}
+                </p>
+                <button
+                  type="button"
+                  onClick={retry}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary"
+                >
+                  <RefreshCw className="h-4 w-4" /> Retry
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        <a
-          href={watchUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-        >
-          Player blocked? Watch on YouTube
-          <ExternalLink className="h-4 w-4" />
-        </a>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={retry}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+          >
+            <RefreshCw className="h-4 w-4" /> Retry player
+          </button>
+          <a
+            href={watchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => openOfficialYouTube(event, videoId, watchUrl)}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+          >
+            Watch on YouTube
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
       </div>
     </div>
   );
