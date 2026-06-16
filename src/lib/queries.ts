@@ -1,10 +1,19 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Track, Album, SortMode, YouTubePlaylist } from "@/lib/types";
 
+/**
+ * Public-safe column list for tracks. The private storage path (`file_path`)
+ * is intentionally excluded — clients only need the `has_file` indicator to
+ * know whether a track is downloadable. The real path is read server-side
+ * (via the admin client) when generating signed stream/download URLs.
+ */
+const TRACK_COLUMNS =
+  "id,title,slug,artist,album_id,duration_seconds,genres,youtube_id,spotify_id,source,preview_url,artwork_url,description,price_cents,is_purchasable,is_published,plays,featured,sort_order,created_at,updated_at,is_short,view_count,like_count,published_at,has_file";
+
 async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track[]> {
   let q = supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("is_short", isShort)
     .not("youtube_id", "is", null);
@@ -21,7 +30,7 @@ async function fetchVideoTracks(isShort: boolean, sort: SortMode): Promise<Track
 
   const { data, error } = await q;
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchTracks(opts?: {
@@ -33,7 +42,7 @@ export async function fetchTracks(opts?: {
 }): Promise<Track[]> {
   let q = supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
@@ -46,7 +55,7 @@ export async function fetchTracks(opts?: {
 
   const { data, error } = await q;
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 /** Fetch the entire published catalog (title + description + metadata) for
@@ -54,36 +63,36 @@ export async function fetchTracks(opts?: {
 export async function fetchCatalogForVibes(): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .order("view_count", { ascending: false, nullsFirst: false })
     .limit(1000);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchFeaturedTracks(): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("featured", true)
     .limit(8);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchLatestTracks(limit = 6): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .eq("is_short", false)
     .order("published_at", { ascending: false, nullsFirst: false })
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchAlbums(): Promise<Album[]> {
@@ -112,13 +121,13 @@ export async function fetchShorts(sort: SortMode = "newest"): Promise<Track[]> {
 export async function fetchTrending(limit = 8): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("is_published", true)
     .not("youtube_id", "is", null)
     .order("view_count", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as Track[];
 }
 
 export async function fetchYouTubePlaylists(): Promise<YouTubePlaylist[]> {
@@ -162,6 +171,7 @@ function synthesizeTrack(item: {
     spotify_id: null,
     source: "youtube",
     file_path: null,
+    has_file: false,
     preview_url: null,
     artwork_url: item.artwork_url,
     description: null,
@@ -196,13 +206,13 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
   const ids = validItems.map((i) => i.youtube_id);
   const { data: tracks, error: tErr } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .in("youtube_id", ids)
     .eq("is_published", true);
   if (tErr) throw tErr;
 
   const byId = new Map<string, Track>();
-  for (const t of tracks ?? []) if (t.youtube_id) byId.set(t.youtube_id, t);
+  for (const t of (tracks ?? []) as Track[]) if (t.youtube_id) byId.set(t.youtube_id, t);
 
   const ordered: Track[] = [];
   for (const it of validItems) {
@@ -215,10 +225,10 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
 export async function fetchTrack(id: string): Promise<Track | null> {
   const { data, error } = await supabase
     .from("tracks")
-    .select("*")
+    .select(TRACK_COLUMNS)
     .eq("id", id)
     .eq("is_published", true)
     .maybeSingle();
   if (error) throw error;
-  return data;
+  return (data as Track | null) ?? null;
 }

@@ -85,7 +85,7 @@ export function TrackCard({
           <span className="text-xs text-muted-foreground">
             {formatDuration(track.duration_seconds)}
           </span>
-          {track.is_purchasable && track.file_path ? (
+          {track.is_purchasable && track.has_file ? (
             <button
               onClick={() => !inCart && cart.add(track)}
               disabled={inCart}

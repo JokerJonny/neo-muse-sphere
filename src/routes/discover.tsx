@@ -52,7 +52,7 @@ function Discover() {
     setResult({ title, tracks });
     if (play && tracks.length) {
       player.playTrack(tracks[0], tracks);
-      if (tracks[0].youtube_id && !tracks[0].file_path && !tracks[0].preview_url) {
+      if (tracks[0].youtube_id && !tracks[0].has_file && !tracks[0].preview_url) {
         player.openVideo();
       }
     }
@@ -224,7 +224,7 @@ function VibeRow({ track, index, queue }: { track: Track; index: number; queue: 
       return;
     }
     playTrack(track, queue);
-    if (track.youtube_id && !track.file_path && !track.preview_url) openVideo();
+    if (track.youtube_id && !track.has_file && !track.preview_url) openVideo();
   };
 
   return (
