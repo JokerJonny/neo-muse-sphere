@@ -284,10 +284,12 @@ async function fetchPlaylists(apiKey: string, channelId: string): Promise<YTPlay
     pageToken = page.nextPageToken;
   } while (pageToken);
 
-  // 2. Playlists referenced by channel sections (catches official Releases not owned by the channel).
-  const sectionIds = (await fetchSectionPlaylistIds(apiKey, channelId)).filter((id) => !byId.has(id));
-  if (sectionIds.length) {
-    const meta = await hydratePlaylistMeta(apiKey, sectionIds);
+  // 2. Official album/single releases from the Releases tab + channel sections.
+  const sectionIds = await fetchSectionPlaylistIds(apiKey, channelId);
+  const releaseIds = await scrapeReleaseIds();
+  const extraIds = [...new Set([...sectionIds, ...releaseIds])].filter((id) => !byId.has(id));
+  if (extraIds.length) {
+    const meta = await hydratePlaylistMeta(apiKey, extraIds);
     for (const [id, m] of meta) {
       byId.set(id, {
         playlistId: id,
