@@ -69,3 +69,14 @@ export async function fetchVideos(): Promise<Track[]> {
   if (error) throw error;
   return data ?? [];
 }
+
+export async function fetchTrack(id: string): Promise<Track | null> {
+  const { data, error } = await supabase
+    .from("tracks")
+    .select("*")
+    .eq("id", id)
+    .eq("is_published", true)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
