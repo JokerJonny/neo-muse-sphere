@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.functions";
 
 const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID as string | undefined;
+// Optional — identifies your PayPal account for attribution.
+const PAYPAL_MERCHANT_ID = "ZEH6GESSELAFL";
 
 export function PayPalCheckout({
   trackIds,
@@ -33,6 +35,7 @@ export function PayPalCheckout({
       <PayPalScriptProvider
         options={{
           clientId: PAYPAL_CLIENT_ID,
+          merchantId: PAYPAL_MERCHANT_ID,
           currency: "USD",
           intent: "capture",
           components: "buttons",
