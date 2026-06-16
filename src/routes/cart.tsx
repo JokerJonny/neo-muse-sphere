@@ -1,12 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
-import { formatMoney } from "@/lib/format";
-import { youtubeThumb } from "@/lib/format";
-import { createCheckout } from "@/lib/checkout.functions";
+import { formatMoney, youtubeThumb } from "@/lib/format";
+import { PayPalCheckout } from "@/components/PayPalCheckout";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Cart — neoSHADE" }] }),
@@ -17,24 +15,10 @@ function CartPage() {
   const cart = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [busy, setBusy] = useState(false);
 
-  async function checkout() {
-    if (!user) {
-      toast.message("Sign in to complete your purchase");
-      return navigate({ to: "/auth" });
-    }
-    setBusy(true);
-    try {
-      const res = await createCheckout({
-        data: { trackIds: cart.items.map((t) => t.id), origin: window.location.origin },
-      });
-      if (res.url) window.location.href = res.url;
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Checkout failed");
-    } finally {
-      setBusy(false);
-    }
+  function handleSuccess() {
+    cart.clear();
+    navigate({ to: "/library" });
   }
 
   return (
@@ -68,10 +52,28 @@ function CartPage() {
             <span className="font-display text-xl text-gradient">{formatMoney(cart.totalCents)}</span>
           </div>
 
-          <button onClick={checkout} disabled={busy} className="w-full rounded-full bg-accent py-3 font-semibold text-accent-foreground shadow-[var(--shadow-neon)] disabled:opacity-60">
-            {busy ? "Redirecting to checkout…" : "Checkout securely"}
-          </button>
-          <p className="text-center text-xs text-muted-foreground">Secure one-time payment via Stripe. Downloads unlock instantly after purchase.</p>
+          {user ? (
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="mb-3 text-center text-sm text-muted-foreground">
+                Pay securely with PayPal — downloads unlock instantly.
+              </p>
+              <PayPalCheckout
+                trackIds={cart.items.map((t) => t.id)}
+                onSuccess={handleSuccess}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                toast.message("Sign in to complete your purchase");
+                navigate({ to: "/auth" });
+              }}
+              className="w-full rounded-full bg-accent py-3 font-semibold text-accent-foreground shadow-[var(--shadow-neon)]"
+            >
+              Sign in to checkout
+            </button>
+          )}
+          <p className="text-center text-xs text-muted-foreground">Secure one-time payment via PayPal ($0.50 per track). Downloads unlock instantly after purchase.</p>
         </div>
       )}
     </div>
