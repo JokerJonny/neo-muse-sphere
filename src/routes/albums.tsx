@@ -9,21 +9,52 @@ import { SyncReleasesButton } from "@/components/SyncReleasesButton";
 import type { YouTubePlaylist } from "@/lib/types";
 
 export const Route = createFileRoute("/albums")({
-  head: () => ({
-    meta: [
-      { title: "Releases & Albums — neoSHADE" },
-      {
-        name: "description",
-        content:
-          "Full neoSHADE albums and releases — official album playlists and projects from the neoUNIVERSE, ready to play in the neoPLAYER.",
-      },
-      { property: "og:title", content: "neoSHADE Releases & Albums" },
-      {
-        property: "og:description",
-        content: "Complete albums and releases streamed straight from the neoUNIVERSE.",
-      },
-    ],
-  }),
+  loader: () => fetchYouTubePlaylists(),
+  head: ({ loaderData }) => {
+    const albums = (loaderData ?? []).slice(0, 20);
+    return {
+      meta: [
+        { title: "Releases & Albums — neoSHADE" },
+        {
+          name: "description",
+          content:
+            "Full neoSHADE albums and releases — official album playlists and projects from the neoUNIVERSE, ready to play in the neoPLAYER.",
+        },
+        { property: "og:title", content: "neoSHADE Releases & Albums" },
+        {
+          property: "og:description",
+          content: "Complete albums and releases streamed straight from the neoUNIVERSE.",
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: "https://universe.neo-shade.com/albums" },
+      ],
+      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/albums" }],
+      scripts: albums.length
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "neoSHADE Releases & Albums",
+                itemListElement: albums.map((a, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  item: {
+                    "@type": "MusicAlbum",
+                    name: a.title,
+                    numTracks: a.item_count,
+                    image: a.artwork_url ?? undefined,
+                    byArtist: { "@type": "MusicGroup", name: "neoSHADE" },
+                    url: `https://universe.neo-shade.com/playlists/${a.id}`,
+                  },
+                })),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
   component: Albums,
 });
 
