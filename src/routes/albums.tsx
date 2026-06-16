@@ -48,7 +48,7 @@ export const Route = createFileRoute("/albums")({
                     numTracks: a.item_count,
                     image: a.artwork_url ?? undefined,
                     byArtist: { "@type": "MusicGroup", name: "neoSHADE" },
-                    url: `https://universe.neo-shade.com/playlists/${a.id}`,
+                    url: siteUrl(`/playlists/${a.id}`),
                   },
                 })),
               }),
