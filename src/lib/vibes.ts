@@ -39,7 +39,7 @@ export const VIBES: Vibe[] = [
     label: "neoCLUB",
     tagline: "Party anthems & high energy",
     keywords: ["club", "party", "dance", "anthem", "boom", "energy", "beat", "drop", "bass", "house", "rave", "banger", "hip hop", "hip-hop", "trap", "drill", "explode", "movement"],
-    from: "#db2777", to: "#06b6d4", emoji: "🪩",
+    from: "#db2777", to: "#06b6d4", emoji: "🪩", image: clubImg.url,
   },
   {
     id: "reggae",
