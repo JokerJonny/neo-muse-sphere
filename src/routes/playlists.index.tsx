@@ -36,7 +36,7 @@ export const Route = createFileRoute("/playlists/")({
                     name: p.title,
                     numTracks: p.item_count,
                     image: p.artwork_url ?? undefined,
-                    url: `https://universe.neo-shade.com/playlists/${p.id}`,
+                    url: siteUrl(`/playlists/${p.id}`),
                   },
                 })),
               }),
