@@ -60,7 +60,7 @@ export const VIBES: Vibe[] = [
     label: "neoREBELLION",
     tagline: "Fight, freedom & uprising",
     keywords: ["rebellion", "rebel", "fight", "freedom", "revolution", "uprising", "defiance", "power", "rise", "riot", "resist", "warrior", "battle", "stand", "war"],
-    from: "#dc2626", to: "#f97316", emoji: "✊",
+    from: "#dc2626", to: "#f97316", emoji: "✊", image: rebellionImg.url,
   },
   {
     id: "cinematic",
