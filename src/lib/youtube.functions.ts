@@ -159,6 +159,57 @@ async function fetchAllVideos(apiKey: string, uploads: string): Promise<YTVideo[
     });
 }
 
+const SCRAPE_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
+
+/**
+ * Scrape the official "Releases" tab (youtube.com/@HANDLE/releases) for album/single
+ * playlist IDs (OLAK5uy_…). These are the artist's real albums/singles and are NOT
+ * returned by the Data API's playlists.list (they're owned by the generic YouTube
+ * channel), so we read them straight off the Releases page, paging through continuations.
+ */
+async function scrapeReleaseIds(): Promise<string[]> {
+  const ids = new Set<string>();
+  try {
+    const res = await fetch(`https://www.youtube.com/@${HANDLE}/releases`, {
+      headers: {
+        "User-Agent": SCRAPE_UA,
+        "Accept-Language": "en-US,en;q=0.9",
+        Cookie: "CONSENT=YES+1; SOCS=CAI",
+      },
+    });
+    const html = await res.text();
+    for (const m of html.matchAll(/OLAK5uy_[A-Za-z0-9_-]+|RDCLAK5uy_[A-Za-z0-9_-]+/g)) {
+      ids.add(m[0]);
+    }
+    const key = html.match(/"INNERTUBE_API_KEY":"([^"]+)"/)?.[1];
+    const ver = html.match(/"INNERTUBE_CONTEXT_CLIENT_VERSION":"([^"]+)"/)?.[1];
+    let cont = html.match(/"continuationCommand":\{"token":"([^"]+)"/)?.[1];
+
+    let guard = 0;
+    while (key && ver && cont && guard < 15) {
+      guard += 1;
+      const r = await fetch(`https://www.youtube.com/youtubei/v1/browse?key=${key}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "User-Agent": SCRAPE_UA },
+        body: JSON.stringify({
+          context: { client: { clientName: "WEB", clientVersion: ver } },
+          continuation: cont,
+        }),
+      });
+      const json = await r.json();
+      const s = JSON.stringify(json);
+      for (const m of s.matchAll(/OLAK5uy_[A-Za-z0-9_-]+|RDCLAK5uy_[A-Za-z0-9_-]+/g)) {
+        ids.add(m[0]);
+      }
+      cont = s.match(/"continuationCommand":\{"token":"([^"]+)"/)?.[1];
+    }
+  } catch (e) {
+    console.error("Release scrape failed:", e);
+  }
+  return [...ids];
+}
+
 /** Collect extra playlist IDs surfaced via the channel's sections (Releases tab, etc.). */
 async function fetchSectionPlaylistIds(apiKey: string, channelId: string): Promise<string[]> {
   try {
@@ -233,10 +284,12 @@ async function fetchPlaylists(apiKey: string, channelId: string): Promise<YTPlay
     pageToken = page.nextPageToken;
   } while (pageToken);
 
-  // 2. Playlists referenced by channel sections (catches official Releases not owned by the channel).
-  const sectionIds = (await fetchSectionPlaylistIds(apiKey, channelId)).filter((id) => !byId.has(id));
-  if (sectionIds.length) {
-    const meta = await hydratePlaylistMeta(apiKey, sectionIds);
+  // 2. Official album/single releases from the Releases tab + channel sections.
+  const sectionIds = await fetchSectionPlaylistIds(apiKey, channelId);
+  const releaseIds = await scrapeReleaseIds();
+  const extraIds = [...new Set([...sectionIds, ...releaseIds])].filter((id) => !byId.has(id));
+  if (extraIds.length) {
+    const meta = await hydratePlaylistMeta(apiKey, extraIds);
     for (const [id, m] of meta) {
       byId.set(id, {
         playlistId: id,

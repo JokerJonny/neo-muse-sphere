@@ -43,9 +43,13 @@ function Albums() {
     queryKey: ["yt-playlists"],
     queryFn: fetchYouTubePlaylists,
   });
-  const releases = data ?? [];
+  const all = data ?? [];
+  // Show official album/single releases (OLAK5uy_…) first; fall back to all if none synced yet.
+  const official = all.filter(isOfficial);
+  const releases = official.length ? official : all;
   const featured = releases[0];
   const rest = releases.slice(1);
+
 
   return (
     <div className="relative mx-auto max-w-7xl px-4 py-12">
