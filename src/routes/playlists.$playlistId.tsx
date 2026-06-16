@@ -14,7 +14,7 @@ export const Route = createFileRoute("/playlists/$playlistId")({
     const desc = p
       ? `${p.title} — ${p.item_count} videos in this neoSHADE playlist. Stream the full set on the neoUNIVERSE.`
       : "Stream curated neoSHADE playlists on the neoUNIVERSE.";
-    const url = `https://universe.neo-shade.com/playlists/${params.playlistId}`;
+    const url = siteUrl(`/playlists/${params.playlistId}`);
     return {
       meta: [
         { title },
