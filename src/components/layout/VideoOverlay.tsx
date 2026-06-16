@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type MouseEvent } from "react";
-import { X, ExternalLink, RefreshCw, AlertTriangle } from "lucide-react";
+import { X, ExternalLink, RefreshCw, AlertTriangle, Play } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
+import { youtubeThumb } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 type PlayerStatus = "loading" | "ready" | "playing" | "slow" | "error";
