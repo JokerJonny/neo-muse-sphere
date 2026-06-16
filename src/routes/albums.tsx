@@ -7,11 +7,13 @@ import { usePlayer } from "@/hooks/use-player";
 import { fetchYouTubePlaylists, fetchPlaylistTracks } from "@/lib/queries";
 import { SyncReleasesButton } from "@/components/SyncReleasesButton";
 import type { YouTubePlaylist } from "@/lib/types";
+import { siteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/albums")({
   loader: () => fetchYouTubePlaylists(),
   head: ({ loaderData }) => {
     const albums = (loaderData ?? []).slice(0, 20);
+    const url = siteUrl("/albums");
     return {
       meta: [
         { title: "Releases & Albums — neoSHADE" },
@@ -26,9 +28,9 @@ export const Route = createFileRoute("/albums")({
           content: "Complete albums and releases streamed straight from the neoUNIVERSE.",
         },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: "https://universe.neo-shade.com/albums" },
+        { property: "og:url", content: url },
       ],
-      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/albums" }],
+      links: [{ rel: "canonical", href: url }],
       scripts: albums.length
         ? [
             {
@@ -46,7 +48,7 @@ export const Route = createFileRoute("/albums")({
                     numTracks: a.item_count,
                     image: a.artwork_url ?? undefined,
                     byArtist: { "@type": "MusicGroup", name: "neoSHADE" },
-                    url: `https://universe.neo-shade.com/playlists/${a.id}`,
+                    url: siteUrl(`/playlists/${a.id}`),
                   },
                 })),
               }),

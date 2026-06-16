@@ -4,6 +4,7 @@ import { ArrowLeft, Play, Eye } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { fetchPlaylist, fetchPlaylistTracks } from "@/lib/queries";
 import { youtubeThumb, formatDuration, formatViews } from "@/lib/format";
+import { siteUrl } from "@/lib/site";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/playlists/$playlistId")({
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/playlists/$playlistId")({
     const desc = p
       ? `${p.title} — ${p.item_count} videos in this neoSHADE playlist. Stream the full set on the neoUNIVERSE.`
       : "Stream curated neoSHADE playlists on the neoUNIVERSE.";
-    const url = `https://universe.neo-shade.com/playlists/${params.playlistId}`;
+    const url = siteUrl(`/playlists/${params.playlistId}`);
     return {
       meta: [
         { title },

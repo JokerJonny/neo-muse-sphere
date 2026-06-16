@@ -8,11 +8,13 @@ import { youtubeThumb, formatDuration, formatViews, timeAgo } from "@/lib/format
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 import { SortFilter } from "@/components/SortFilter";
 import type { Track, SortMode } from "@/lib/types";
+import { siteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/videos")({
   loader: () => fetchVideos("newest"),
   head: ({ loaderData }) => {
     const videos = (loaderData ?? []).slice(0, 12);
+    const url = siteUrl("/videos");
     return {
       meta: [
         { title: "Videos — neoSHADE" },
@@ -20,9 +22,9 @@ export const Route = createFileRoute("/videos")({
         { property: "og:title", content: "neoSHADE Videos" },
         { property: "og:description", content: "Cinematic neoSHADE music videos — stream the full neoUNIVERSE visual catalogue." },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: "https://universe.neo-shade.com/videos" },
+        { property: "og:url", content: url },
       ],
-      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/videos" }],
+      links: [{ rel: "canonical", href: url }],
       scripts: videos.length
         ? [
             {

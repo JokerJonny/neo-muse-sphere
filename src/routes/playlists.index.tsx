@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { ListVideo, Play } from "lucide-react";
 import { fetchYouTubePlaylists } from "@/lib/queries";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
+import { siteUrl } from "@/lib/site";
 
 export const Route = createFileRoute("/playlists/")({
   loader: () => fetchYouTubePlaylists(),
   head: ({ loaderData }) => {
     const playlists = (loaderData ?? []).slice(0, 20);
+    const url = siteUrl("/playlists");
     return {
       meta: [
         { title: "Playlists — neoSHADE" },
@@ -15,9 +17,9 @@ export const Route = createFileRoute("/playlists/")({
         { property: "og:title", content: "neoSHADE Playlists" },
         { property: "og:description", content: "Curated neoSHADE collections — full sets streamed straight from the neoUNIVERSE." },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: "https://universe.neo-shade.com/playlists" },
+        { property: "og:url", content: url },
       ],
-      links: [{ rel: "canonical", href: "https://universe.neo-shade.com/playlists" }],
+      links: [{ rel: "canonical", href: url }],
       scripts: playlists.length
         ? [
             {
@@ -34,7 +36,7 @@ export const Route = createFileRoute("/playlists/")({
                     name: p.title,
                     numTracks: p.item_count,
                     image: p.artwork_url ?? undefined,
-                    url: `https://universe.neo-shade.com/playlists/${p.id}`,
+                    url: siteUrl(`/playlists/${p.id}`),
                   },
                 })),
               }),

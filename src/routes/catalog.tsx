@@ -5,20 +5,24 @@ import { Search } from "lucide-react";
 import { TrackCard } from "@/components/TrackCard";
 import { fetchTracks } from "@/lib/queries";
 import { GENRES } from "@/lib/constants";
+import { siteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/catalog")({
-  head: () => ({
-    meta: [
-      { title: "Music Store — neoSHADE" },
-      { name: "description", content: "Browse and stream the full neoSHADE catalog. Search by title, filter by genre, and own any track for $0.50 via PayPal." },
-      { property: "og:title", content: "neoSHADE Music Store" },
-      { property: "og:description", content: "Stream the full neoSHADE catalog free, or own any track for $0.50 with secure PayPal checkout." },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://universe.neo-shade.com/catalog" },
-    ],
-    links: [{ rel: "canonical", href: "https://universe.neo-shade.com/catalog" }],
-  }),
+  head: () => {
+    const url = siteUrl("/catalog");
+    return {
+      meta: [
+        { title: "Music Store — neoSHADE" },
+        { name: "description", content: "Browse and stream the full neoSHADE catalog. Search by title, filter by genre, and own any track for $0.50 via PayPal." },
+        { property: "og:title", content: "neoSHADE Music Store" },
+        { property: "og:description", content: "Stream the full neoSHADE catalog free, or own any track for $0.50 with secure PayPal checkout." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: Catalog,
 });
 
