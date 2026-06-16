@@ -99,6 +99,7 @@ function Videos() {
       {featured && (
         <button
           onClick={() => open(featured)}
+          aria-label={`Play video: ${featured.title}`}
           className="group relative mt-8 block w-full overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[var(--shadow-neon)] transition-all hover:border-accent/70"
         >
           <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9]">
@@ -154,6 +155,7 @@ function Videos() {
           <button
             key={t.id}
             onClick={() => open(t)}
+            aria-label={`Play video: ${t.title}`}
             className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-accent/70 hover:shadow-[var(--shadow-neon)]"
           >
             <div className="relative aspect-video overflow-hidden bg-secondary">
