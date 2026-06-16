@@ -129,17 +129,58 @@ export async function fetchPlaylist(id: string): Promise<YouTubePlaylist | null>
   return data;
 }
 
-/** Returns the tracks belonging to a playlist, ordered by playlist position. */
+/** Build a playable Track from a raw YouTube playlist item (for release songs
+ * that live on the Topic channel and aren't in the tracks library). */
+function synthesizeTrack(item: {
+  youtube_id: string;
+  title: string | null;
+  artwork_url: string | null;
+}): Track {
+  const now = new Date().toISOString();
+  return {
+    id: `yt-${item.youtube_id}`,
+    title: item.title ?? "Untitled",
+    slug: null,
+    artist: "neoSHADE",
+    album_id: null,
+    duration_seconds: null,
+    genres: [],
+    youtube_id: item.youtube_id,
+    spotify_id: null,
+    source: "youtube",
+    file_path: null,
+    preview_url: null,
+    artwork_url: item.artwork_url,
+    description: null,
+    price_cents: 0,
+    is_purchasable: false,
+    is_published: true,
+    plays: 0,
+    featured: false,
+    sort_order: 0,
+    created_at: now,
+    updated_at: now,
+    is_short: false,
+    view_count: 0,
+    like_count: 0,
+    published_at: null,
+  };
+}
+
+/** Returns the tracks belonging to a playlist, ordered by playlist position.
+ * Uses real library tracks when available, otherwise synthesizes a playable
+ * track from the stored playlist item so every release plays in full. */
 export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> {
   const { data: items, error } = await supabase
     .from("youtube_playlist_items")
-    .select("youtube_id, position")
+    .select("youtube_id, position, title, artwork_url")
     .eq("playlist_id", playlistId)
     .order("position", { ascending: true });
   if (error) throw error;
-  const ids = (items ?? []).map((i) => i.youtube_id).filter(Boolean);
-  if (!ids.length) return [];
+  const validItems = (items ?? []).filter((i) => i.youtube_id);
+  if (!validItems.length) return [];
 
+  const ids = validItems.map((i) => i.youtube_id);
   const { data: tracks, error: tErr } = await supabase
     .from("tracks")
     .select("*")
@@ -151,9 +192,9 @@ export async function fetchPlaylistTracks(playlistId: string): Promise<Track[]> 
   for (const t of tracks ?? []) if (t.youtube_id) byId.set(t.youtube_id, t);
 
   const ordered: Track[] = [];
-  for (const it of items ?? []) {
-    const t = it.youtube_id ? byId.get(it.youtube_id) : undefined;
-    if (t) ordered.push(t);
+  for (const it of validItems) {
+    const existing = byId.get(it.youtube_id);
+    ordered.push(existing ?? synthesizeTrack(it));
   }
   return ordered;
 }
