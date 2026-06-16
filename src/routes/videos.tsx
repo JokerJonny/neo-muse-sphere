@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Play, Clock, Film } from "lucide-react";
+import { useState } from "react";
+import { Play, Clock, Film, Eye } from "lucide-react";
 import { usePlayer } from "@/hooks/use-player";
 import { fetchVideos } from "@/lib/queries";
-import { youtubeThumb, formatDuration } from "@/lib/format";
+import { youtubeThumb, formatDuration, formatViews, timeAgo } from "@/lib/format";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
-import type { Track } from "@/lib/types";
+import { SortFilter } from "@/components/SortFilter";
+import type { Track, SortMode } from "@/lib/types";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -20,7 +22,11 @@ export const Route = createFileRoute("/videos")({
 
 function Videos() {
   const player = usePlayer();
-  const { data, isLoading } = useQuery({ queryKey: ["videos"], queryFn: fetchVideos });
+  const [sort, setSort] = useState<SortMode>("newest");
+  const { data, isLoading } = useQuery({
+    queryKey: ["videos", sort],
+    queryFn: () => fetchVideos(sort),
+  });
 
   const videos = data ?? [];
   const featured = videos[0];
@@ -47,6 +53,10 @@ function Videos() {
         <SyncYouTubeButton />
       </div>
 
+      <div className="mt-6 flex items-center justify-between gap-3">
+        <SortFilter value={sort} onChange={setSort} />
+      </div>
+
       {/* Featured hero */}
       {featured && (
         <button
@@ -68,7 +78,7 @@ function Videos() {
             <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
 
             <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground shadow-[var(--shadow-neon)]">
-              Latest Drop
+              {sort === "popular" ? "Most Watched" : "Latest Drop"}
             </span>
 
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-8">
@@ -76,8 +86,11 @@ function Videos() {
                 <h2 className="font-display text-xl font-bold leading-tight sm:text-3xl">
                   {featured.title}
                 </h2>
-                <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                   <span>{featured.artist}</span>
+                  <span className="inline-flex items-center gap-1">
+                    <Eye className="h-3.5 w-3.5" /> {formatViews(featured.view_count)}
+                  </span>
                   {featured.duration_seconds ? (
                     <span className="inline-flex items-center gap-1 font-mono">
                       <Clock className="h-3.5 w-3.5" /> {formatDuration(featured.duration_seconds)}
@@ -90,7 +103,6 @@ function Videos() {
               </span>
             </div>
 
-            {/* mobile centered play */}
             <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent/90 text-accent-foreground shadow-[var(--shadow-neon)] opacity-0 transition-opacity group-hover:opacity-100 sm:hidden">
               <Play className="h-7 w-7 translate-x-[1px]" fill="currentColor" />
             </span>
@@ -127,7 +139,12 @@ function Videos() {
             </div>
             <div className="p-3">
               <p className="truncate font-semibold transition-colors group-hover:text-accent">{t.title}</p>
-              <p className="truncate text-xs text-muted-foreground">{t.artist}</p>
+              <p className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <Eye className="h-3 w-3" /> {formatViews(t.view_count)}
+                </span>
+                {t.published_at ? <span>· {timeAgo(t.published_at)}</span> : null}
+              </p>
             </div>
           </button>
         ))}
