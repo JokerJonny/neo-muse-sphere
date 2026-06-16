@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { youtubeThumb } from "@/lib/format";
 import type { Track, Album, SortMode, YouTubePlaylist } from "@/lib/types";
 
 /**
