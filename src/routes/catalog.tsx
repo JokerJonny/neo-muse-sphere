@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { TrackCard } from "@/components/TrackCard";
 import { fetchTracks } from "@/lib/queries";
 import { GENRES } from "@/lib/constants";
+import { siteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/catalog")({
