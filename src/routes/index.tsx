@@ -59,7 +59,12 @@ function Index() {
           <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.05] sm:text-7xl">
             <GlitchText className="text-gradient">neoSHADE</GlitchText>
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-muted-foreground">{BRAND.tagline}. {BRAND.bio}</p>
+          <p className="mt-4 font-display text-lg font-semibold tracking-wide text-primary sm:text-xl">
+            {BRAND.tagline}
+          </p>
+          <p className="mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">
+            {BRAND.intro} {BRAND.bio}
+          </p>
           <div className="mt-8 flex flex-wrap gap-3">
             {heroVideo && (
               <button onClick={() => openVideo(heroVideo)} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-[var(--shadow-neon)] transition-transform hover:scale-105">
