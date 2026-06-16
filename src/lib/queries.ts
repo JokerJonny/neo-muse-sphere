@@ -49,6 +49,19 @@ export async function fetchTracks(opts?: {
   return data ?? [];
 }
 
+/** Fetch the entire published catalog (title + description + metadata) for
+ * client-side neoVIBE matching across all content. */
+export async function fetchCatalogForVibes(): Promise<Track[]> {
+  const { data, error } = await supabase
+    .from("tracks")
+    .select("*")
+    .eq("is_published", true)
+    .order("view_count", { ascending: false, nullsFirst: false })
+    .limit(1000);
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function fetchFeaturedTracks(): Promise<Track[]> {
   const { data, error } = await supabase
     .from("tracks")
