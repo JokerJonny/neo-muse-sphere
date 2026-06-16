@@ -1,8 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type {} from "@tanstack/react-start";
+import { getRequestUrl } from "@tanstack/react-start/server";
 import { fetchYouTubePlaylists, fetchTracks } from "@/lib/queries";
 
-const BASE_URL = "https://universe.neo-shade.com";
+const FALLBACK_BASE_URL = "https://universe.neo-shade.com";
+
+function resolveBaseUrl(): string {
+  try {
+    const url = getRequestUrl({ xForwardedHost: true, xForwardedProto: true });
+    if (url?.origin && !url.origin.includes("localhost") && !url.origin.includes("127.0.0.1")) {
+      return url.origin;
+    }
+  } catch {
+    // No request context — fall back to the production domain.
+  }
+  return FALLBACK_BASE_URL;
+}
 
 interface SitemapEntry {
   path: string;
