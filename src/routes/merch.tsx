@@ -60,9 +60,11 @@ function Merch() {
           </h1>
           <p className="mt-3 text-muted-foreground">
             Wear the neon dark. Official {BRAND.universe} apparel, accessories and prints —
-            printed on demand and shipped worldwide via Printify. This is{" "}
+            printed on demand and shipped worldwide via Printify, with secure{" "}
+            <span className="text-foreground">PayPal checkout</span>. This is{" "}
             <span className="text-foreground">separate from the digital music store</span>.
           </p>
+
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={BRAND.merchUrl}
@@ -114,7 +116,8 @@ function Merch() {
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
         <InfoCard icon={Truck} title="Worldwide Shipping" desc="Printed on demand and delivered globally." />
         <InfoCard icon={Package} title="Premium Quality" desc="Durable apparel and accessories built to last." />
-        <InfoCard icon={ShoppingBag} title="Secure Checkout" desc="Purchases handled on the official Printify storefront." />
+        <InfoCard icon={ShoppingBag} title="Pay with PayPal" desc="Secure PayPal checkout on the official Printify storefront." />
+
       </div>
 
       <p className="mt-10 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">

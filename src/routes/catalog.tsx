@@ -28,8 +28,25 @@ function Catalog() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="font-display text-3xl font-bold sm:text-4xl">Catalog</h1>
-      <p className="mt-1 text-muted-foreground">Stream everything free. Own any track for $0.50.</p>
+      {/* Store switch banner */}
+      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/50 p-2 text-sm">
+        <span className="rounded-lg bg-primary px-3 py-1.5 font-semibold text-primary-foreground shadow-[var(--shadow-neon)]">
+          🎵 Music Store
+        </span>
+        <a
+          href="/merch"
+          className="rounded-lg px-3 py-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          🛍️ Merch Store
+        </a>
+        <span className="ml-auto hidden text-xs text-muted-foreground sm:block">
+          Two separate stores — digital music vs. physical merch.
+        </span>
+      </div>
+
+      <h1 className="font-display text-3xl font-bold sm:text-4xl">Music Store</h1>
+      <p className="mt-1 text-muted-foreground">Stream everything free. Own any track for $0.50 — secure PayPal checkout.</p>
+
 
       <div className="mt-6 flex flex-col gap-4">
         <div className="relative max-w-md">
