@@ -12,9 +12,14 @@ export function formatMoney(cents: number, currency = "usd"): string {
   }).format(cents / 100);
 }
 
-export function youtubeThumb(id?: string | null): string | null {
+export function youtubeThumb(
+  id?: string | null,
+  quality: "hq" | "sd" | "maxres" = "hq",
+): string | null {
   if (!id) return null;
-  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  const file =
+    quality === "maxres" ? "maxresdefault" : quality === "sd" ? "sddefault" : "hqdefault";
+  return `https://i.ytimg.com/vi/${id}/${file}.jpg`;
 }
 
 export function slugify(input: string): string {
