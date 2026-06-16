@@ -43,17 +43,23 @@ function Videos() {
             className="group overflow-hidden rounded-xl border border-border bg-card text-left transition-colors hover:border-accent/60"
           >
             <div className="relative aspect-video overflow-hidden bg-secondary">
-              <img src={youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={t.artwork_url ?? youtubeThumb(t.youtube_id) ?? ""} alt={t.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 flex items-center justify-center bg-background/30 opacity-0 transition-opacity group-hover:opacity-100">
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-[var(--shadow-neon)]">
                   <Play className="h-6 w-6 translate-x-[1px]" fill="currentColor" />
                 </span>
               </div>
+              {t.duration_seconds ? (
+                <span className="absolute bottom-2 right-2 rounded bg-background/85 px-1.5 py-0.5 font-mono text-[11px] text-foreground">
+                  {formatDuration(t.duration_seconds)}
+                </span>
+              ) : null}
             </div>
             <div className="p-3">
               <p className="truncate font-semibold">{t.title}</p>
               <p className="truncate text-xs text-muted-foreground">{t.artist}</p>
             </div>
+
           </button>
         ))}
       </div>
