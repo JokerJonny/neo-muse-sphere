@@ -22,7 +22,13 @@ interface YTPlaylist {
   description: string;
   thumbnail: string | null;
   publishedAt: string;
+  official: boolean;
   items: { videoId: string; title: string; thumbnail: string | null; position: number }[];
+}
+
+/** YouTube Music album/single playlists (the "Releases" tab) use this prefix. */
+function isOfficialRelease(playlistId: string): boolean {
+  return playlistId.startsWith("OLAK5uy_") || playlistId.startsWith("RDCLAK5uy_");
 }
 
 function parseDuration(iso?: string | null): number | null {
@@ -153,8 +159,54 @@ async function fetchAllVideos(apiKey: string, uploads: string): Promise<YTVideo[
     });
 }
 
+/** Collect extra playlist IDs surfaced via the channel's sections (Releases tab, etc.). */
+async function fetchSectionPlaylistIds(apiKey: string, channelId: string): Promise<string[]> {
+  try {
+    const page = await ytFetch(
+      "channelSections",
+      { part: "contentDetails", channelId },
+      apiKey,
+    );
+    const ids = new Set<string>();
+    for (const s of page.items ?? []) {
+      for (const pid of s?.contentDetails?.playlists ?? []) {
+        if (pid) ids.add(pid);
+      }
+    }
+    return [...ids];
+  } catch {
+    return [];
+  }
+}
+
+async function hydratePlaylistMeta(
+  apiKey: string,
+  ids: string[],
+): Promise<Map<string, { title: string; description: string; thumbnail: string | null; publishedAt: string }>> {
+  const map = new Map<string, { title: string; description: string; thumbnail: string | null; publishedAt: string }>();
+  for (let i = 0; i < ids.length; i += 50) {
+    const batch = ids.slice(i, i + 50);
+    const page = await ytFetch(
+      "playlists",
+      { part: "snippet", id: batch.join(",") },
+      apiKey,
+    );
+    for (const pl of page.items ?? []) {
+      map.set(pl.id, {
+        title: pl.snippet?.title ?? "Untitled playlist",
+        description: pl.snippet?.description ?? "",
+        thumbnail: pickThumb(pl.snippet?.thumbnails),
+        publishedAt: pl.snippet?.publishedAt ?? new Date().toISOString(),
+      });
+    }
+  }
+  return map;
+}
+
 async function fetchPlaylists(apiKey: string, channelId: string): Promise<YTPlaylist[]> {
-  const playlists: YTPlaylist[] = [];
+  const byId = new Map<string, YTPlaylist>();
+
+  // 1. Channel-owned playlists.
   let pageToken: string | undefined;
   do {
     const page = await ytFetch(
@@ -168,17 +220,37 @@ async function fetchPlaylists(apiKey: string, channelId: string): Promise<YTPlay
       apiKey,
     );
     for (const pl of page.items ?? []) {
-      playlists.push({
+      byId.set(pl.id, {
         playlistId: pl.id,
         title: pl.snippet?.title ?? "Untitled playlist",
         description: pl.snippet?.description ?? "",
         thumbnail: pickThumb(pl.snippet?.thumbnails),
         publishedAt: pl.snippet?.publishedAt ?? new Date().toISOString(),
+        official: isOfficialRelease(pl.id),
         items: [],
       });
     }
     pageToken = page.nextPageToken;
   } while (pageToken);
+
+  // 2. Playlists referenced by channel sections (catches official Releases not owned by the channel).
+  const sectionIds = (await fetchSectionPlaylistIds(apiKey, channelId)).filter((id) => !byId.has(id));
+  if (sectionIds.length) {
+    const meta = await hydratePlaylistMeta(apiKey, sectionIds);
+    for (const [id, m] of meta) {
+      byId.set(id, {
+        playlistId: id,
+        title: m.title,
+        description: m.description,
+        thumbnail: m.thumbnail,
+        publishedAt: m.publishedAt,
+        official: isOfficialRelease(id),
+        items: [],
+      });
+    }
+  }
+
+  const playlists = [...byId.values()];
 
   // Fetch items for each playlist.
   for (const pl of playlists) {
@@ -208,7 +280,62 @@ async function fetchPlaylists(apiKey: string, channelId: string): Promise<YTPlay
     } while (token);
   }
 
+  // Official releases first, then newest by published date.
+  playlists.sort((a, b) => {
+    if (a.official !== b.official) return a.official ? -1 : 1;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
+
   return playlists;
+}
+
+/** Upsert playlists + items into the DB. Returns count synced. */
+async function syncPlaylistsToDb(
+  apiKey: string,
+  channelId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabaseAdmin: any,
+): Promise<number> {
+  const playlists = await fetchPlaylists(apiKey, channelId);
+  let count = 0;
+  for (let i = 0; i < playlists.length; i++) {
+    const pl = playlists[i];
+    const { data: row, error: plErr } = await supabaseAdmin
+      .from("youtube_playlists")
+      .upsert(
+        {
+          youtube_playlist_id: pl.playlistId,
+          title: pl.title,
+          description: pl.description,
+          artwork_url: pl.thumbnail,
+          item_count: pl.items.length,
+          published_at: pl.publishedAt,
+          sort_order: i,
+          is_published: true,
+        },
+        { onConflict: "youtube_playlist_id" },
+      )
+      .select("id")
+      .single();
+    if (plErr) throw new Error(plErr.message);
+
+    await supabaseAdmin.from("youtube_playlist_items").delete().eq("playlist_id", row.id);
+    if (pl.items.length) {
+      const itemRows = pl.items.map((it) => ({
+        playlist_id: row.id,
+        youtube_id: it.videoId,
+        position: it.position,
+        title: it.title,
+        artwork_url: it.thumbnail,
+      }));
+      const { error: itErr } = await supabaseAdmin
+        .from("youtube_playlist_items")
+        .insert(itemRows);
+      if (itErr) throw new Error(itErr.message);
+    }
+    count += 1;
+  }
+  return count;
 }
 
 export const syncYouTube = createServerFn({ method: "POST" })
@@ -293,47 +420,10 @@ export const syncYouTube = createServerFn({ method: "POST" })
       }
     }
 
-    // Sync playlists + items.
+    // Sync playlists + items (releases).
     let playlistCount = 0;
     try {
-      const playlists = await fetchPlaylists(apiKey, channelId);
-      for (let i = 0; i < playlists.length; i++) {
-        const pl = playlists[i];
-        const { data: row, error: plErr } = await supabaseAdmin
-          .from("youtube_playlists")
-          .upsert(
-            {
-              youtube_playlist_id: pl.playlistId,
-              title: pl.title,
-              description: pl.description,
-              artwork_url: pl.thumbnail,
-              item_count: pl.items.length,
-              published_at: pl.publishedAt,
-              sort_order: i,
-              is_published: true,
-            },
-            { onConflict: "youtube_playlist_id" },
-          )
-          .select("id")
-          .single();
-        if (plErr) throw new Error(plErr.message);
-
-        await supabaseAdmin.from("youtube_playlist_items").delete().eq("playlist_id", row.id);
-        if (pl.items.length) {
-          const itemRows = pl.items.map((it) => ({
-            playlist_id: row.id,
-            youtube_id: it.videoId,
-            position: it.position,
-            title: it.title,
-            artwork_url: it.thumbnail,
-          }));
-          const { error: itErr } = await supabaseAdmin
-            .from("youtube_playlist_items")
-            .insert(itemRows);
-          if (itErr) throw new Error(itErr.message);
-        }
-        playlistCount += 1;
-      }
+      playlistCount = await syncPlaylistsToDb(apiKey, channelId, supabaseAdmin);
     } catch (e) {
       // Playlists are non-critical; surface but don't fail the whole sync.
       console.error("Playlist sync failed:", e);
@@ -348,4 +438,25 @@ export const syncYouTube = createServerFn({ method: "POST" })
       videos: videos.length - shorts,
       playlists: playlistCount,
     };
+  });
+
+/** Focused sync that only refreshes the Releases tab (album/release playlists). */
+export const syncReleases = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden: admin access required.");
+
+    const apiKey = process.env.YOUTUBE_API_KEY;
+    if (!apiKey) {
+      throw new Error("YouTube sync is not configured. Add a YOUTUBE_API_KEY secret.");
+    }
+
+    const { channelId } = await resolveChannel(apiKey);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const playlists = await syncPlaylistsToDb(apiKey, channelId, supabaseAdmin);
+    return { playlists };
   });
