@@ -27,6 +27,7 @@ import { Route as TracksTrackIdRouteImport } from './routes/tracks.$trackId'
 import { Route as PlaylistsPlaylistIdRouteImport } from './routes/playlists.$playlistId'
 import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as EmbedYoutubeVideoIdRouteImport } from './routes/embed.youtube.$videoId'
 
 const VideosRoute = VideosRouteImport.update({
   id: '/videos',
@@ -117,6 +118,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const EmbedYoutubeVideoIdRoute = EmbedYoutubeVideoIdRouteImport.update({
+  id: '/embed/youtube/$videoId',
+  path: '/embed/youtube/$videoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists/': typeof PlaylistsIndexRoute
+  '/embed/youtube/$videoId': typeof EmbedYoutubeVideoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByTo {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists': typeof PlaylistsIndexRoute
+  '/embed/youtube/$videoId': typeof EmbedYoutubeVideoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/playlists/$playlistId': typeof PlaylistsPlaylistIdRoute
   '/tracks/$trackId': typeof TracksTrackIdRoute
   '/playlists/': typeof PlaylistsIndexRoute
+  '/embed/youtube/$videoId': typeof EmbedYoutubeVideoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists/'
+    | '/embed/youtube/$videoId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists'
+    | '/embed/youtube/$videoId'
   id:
     | '__root__'
     | '/'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/playlists/$playlistId'
     | '/tracks/$trackId'
     | '/playlists/'
+    | '/embed/youtube/$videoId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -251,6 +263,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideosRoute: typeof VideosRoute
   TracksTrackIdRoute: typeof TracksTrackIdRoute
+  EmbedYoutubeVideoIdRoute: typeof EmbedYoutubeVideoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -381,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/embed/youtube/$videoId': {
+      id: '/embed/youtube/$videoId'
+      path: '/embed/youtube/$videoId'
+      fullPath: '/embed/youtube/$videoId'
+      preLoaderRoute: typeof EmbedYoutubeVideoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -426,6 +446,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideosRoute: VideosRoute,
   TracksTrackIdRoute: TracksTrackIdRoute,
+  EmbedYoutubeVideoIdRoute: EmbedYoutubeVideoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
