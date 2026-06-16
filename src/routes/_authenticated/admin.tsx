@@ -1,11 +1,17 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Youtube, Video, Music } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchVideos, fetchTracks } from "@/lib/queries";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
+import { requireAdmin } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  // Server-side role enforcement: non-admins are redirected before the page renders.
+  beforeLoad: async () => {
+    const { isAdmin } = await requireAdmin();
+    if (!isAdmin) throw redirect({ to: "/" });
+  },
   head: () => ({ meta: [{ title: "Admin — neoSHADE" }] }),
   component: Admin,
 });
