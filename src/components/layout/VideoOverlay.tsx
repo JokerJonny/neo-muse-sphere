@@ -98,19 +98,24 @@ export function VideoOverlay() {
       >
         <X className="h-5 w-5" />
       </button>
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex w-full flex-col items-center gap-3">
         <div
           className={cn(
-            "scanlines relative overflow-hidden rounded-xl neon-border",
-            isShort ? "aspect-[9/16] h-[82vh] max-h-[82vh] w-auto max-w-[94vw]" : "aspect-video w-full max-w-5xl",
+            "neo-video-wrapper scanlines neon-border",
+            isShort && "is-short",
           )}
+          style={
+            isShort
+              ? undefined
+              : { width: "min(96vw, 1280px)", maxHeight: "82vh" }
+          }
         >
           <iframe
-            className="h-full w-full"
             src={embedSrc}
             title={current.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            playsInline
             referrerPolicy="origin-when-cross-origin"
           />
           {(playerStatus === "error" || playerStatus === "slow") && (
