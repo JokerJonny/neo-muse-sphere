@@ -115,7 +115,6 @@ export function VideoOverlay() {
             title={current.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            playsInline
             referrerPolicy="origin-when-cross-origin"
           />
           {(playerStatus === "error" || playerStatus === "slow") && (
