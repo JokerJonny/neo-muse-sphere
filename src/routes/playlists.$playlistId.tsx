@@ -146,7 +146,7 @@ function PlaylistDetail() {
         )}
       </div>
 
-      <ArtistProfileCard className="mt-12" />
+      <ArtistProfileCard showStats className="mt-12" />
     </div>
   );
 }

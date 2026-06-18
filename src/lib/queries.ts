@@ -271,3 +271,30 @@ export async function fetchTrack(id: string): Promise<Track | null> {
   if (error) throw error;
   return (data as Track | null) ?? null;
 }
+
+export type ArtistCounts = {
+  albums: number;
+  songs: number;
+  videos: number;
+  shorts: number;
+};
+
+/** Live catalog counts for the artist profile statistics row. */
+export async function fetchArtistCounts(): Promise<ArtistCounts> {
+  const published = () =>
+    supabase.from("tracks").select("id", { count: "exact", head: true }).eq("is_published", true);
+
+  const [songs, videos, shorts, albums] = await Promise.all([
+    published(),
+    published().eq("is_short", false).not("youtube_id", "is", null),
+    published().eq("is_short", true),
+    supabase.from("youtube_playlists").select("id", { count: "exact", head: true }),
+  ]);
+
+  return {
+    songs: songs.count ?? 0,
+    videos: videos.count ?? 0,
+    shorts: shorts.count ?? 0,
+    albums: albums.count ?? 0,
+  };
+}
