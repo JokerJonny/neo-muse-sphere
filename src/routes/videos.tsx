@@ -9,6 +9,7 @@ import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 import { SortFilter } from "@/components/SortFilter";
 import type { Track, SortMode } from "@/lib/types";
 import { siteUrl } from "@/lib/site";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
 
 export const Route = createFileRoute("/videos")({
   loader: () => fetchVideos("newest"),
