@@ -56,3 +56,11 @@ export function slugify(input: string): string {
     .replace(/(^-|-$)/g, "")
     .slice(0, 80);
 }
+
+/** Compact number, e.g. 1.2K, 3.4M. Returns "—" for null/undefined. */
+export function formatCompact(n?: number | null): string {
+  if (n === null || n === undefined) return "—";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(n >= 10_000_000 ? 0 : 1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1)}K`;
+  return `${n}`;
+}
