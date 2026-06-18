@@ -110,6 +110,13 @@ function Index() {
         </div>
       </section>
 
+      {/* Artist profile */}
+      <section className="mx-auto max-w-7xl px-4 py-6">
+        <ArtistProfileCard showStats />
+      </section>
+
+
+
       {/* Featured videos */}
       {!!featuredVideos.length && (
         <Section title="Featured Videos" href="/videos">
