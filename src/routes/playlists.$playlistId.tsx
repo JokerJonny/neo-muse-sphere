@@ -5,6 +5,7 @@ import { usePlayer } from "@/hooks/use-player";
 import { fetchPlaylist, fetchPlaylistTracks } from "@/lib/queries";
 import { youtubeThumb, formatDuration, formatViews } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/playlists/$playlistId")({
