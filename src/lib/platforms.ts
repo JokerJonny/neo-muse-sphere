@@ -146,7 +146,7 @@ export const PLATFORM_CATEGORIES: PlatformCategory[] = [
       {
         key: "github",
         label: "GitHub",
-        url: "https://github.com/Jonnygeo",
+        url: "https://github.com/JokerJonny",
         description: "Apps, repositories, AI tools & source code.",
       },
       {
@@ -199,5 +199,5 @@ export const SOCIAL_LINKS: { key: BrandKey; label: string; url: string }[] = [
   { key: "instagram", label: "Instagram", url: "https://instagram.com/neoshademusic" },
   { key: "x", label: "X", url: "https://x.com/neoshade2025" },
   { key: "tiktok", label: "TikTok", url: "https://www.tiktok.com/@neoshadeai" },
-  { key: "github", label: "GitHub", url: "https://github.com/Jonnygeo" },
+  { key: "github", label: "GitHub", url: "https://github.com/JokerJonny" },
 ];
