@@ -144,6 +144,8 @@ function PlaylistDetail() {
           <p className="p-8 text-center text-sm text-muted-foreground">No videos in this playlist yet.</p>
         )}
       </div>
+
+      <ArtistProfileCard className="mt-12" />
     </div>
   );
 }
