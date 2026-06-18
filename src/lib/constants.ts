@@ -34,7 +34,7 @@ export const ARTIST_COUNTS: {
   liveAlbums: { value: 70, mode: "exact", suffix: "", label: "Live Albums" },
   backloggedAlbums: { value: 67, mode: "exact", suffix: "", label: "Backlogged Albums" },
   songs: { value: 1200, mode: "exact", suffix: "+", label: "Total Songs" },
-  videos: { value: 170, mode: "exact", suffix: "+", label: "Videos" },
+  videos: { value: 227, mode: "exact", suffix: "+", label: "Videos" },
   shorts: { value: 50, mode: "exact", suffix: "+", label: "Shorts" },
 };
 
