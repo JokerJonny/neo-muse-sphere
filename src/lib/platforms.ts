@@ -7,10 +7,9 @@ import {
   siTiktok,
   siGithub,
   siApplemusic,
-  siAmazonmusic,
   type SimpleIcon,
 } from "simple-icons";
-import { Globe, Sparkles, Rocket } from "lucide-react";
+import { Globe, Sparkles, Rocket, Music2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type BrandKey =
@@ -41,7 +40,7 @@ export const BRANDS: Record<BrandKey, Brand> = {
   tiktok: { kind: "simple", icon: siTiktok },
   github: { kind: "simple", icon: siGithub },
   applemusic: { kind: "simple", icon: siApplemusic },
-  amazonmusic: { kind: "simple", icon: siAmazonmusic },
+  amazonmusic: { kind: "lucide", icon: Music2 },
   universe: { kind: "lucide", icon: Sparkles },
   neoshadeai: { kind: "lucide", icon: Rocket },
   neoshade: { kind: "lucide", icon: Globe },
