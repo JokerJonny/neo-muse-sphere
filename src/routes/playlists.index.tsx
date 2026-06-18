@@ -4,6 +4,7 @@ import { ListVideo, Play } from "lucide-react";
 import { fetchYouTubePlaylists } from "@/lib/queries";
 import { SyncYouTubeButton } from "@/components/SyncYouTubeButton";
 import { siteUrl } from "@/lib/site";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
 
 export const Route = createFileRoute("/playlists/")({
   loader: () => fetchYouTubePlaylists(),
