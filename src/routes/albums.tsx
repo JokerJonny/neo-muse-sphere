@@ -129,7 +129,7 @@ function Albums() {
 
       {!isLoading && releases.length === 0 && <ComingSoon />}
 
-      <ArtistProfileCard className="mt-14" />
+      <ArtistProfileCard showStats className="mt-14" />
     </div>
   );
 }
