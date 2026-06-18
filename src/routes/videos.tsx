@@ -199,6 +199,8 @@ function Videos() {
           <SyncYouTubeButton />
         </div>
       )}
+
+      <ArtistProfileCard className="mt-12" />
     </div>
   );
 }
