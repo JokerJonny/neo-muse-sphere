@@ -13,6 +13,20 @@ export const BRAND = {
   trackPriceCents: 50,
 };
 
+/**
+ * Editable placeholder figures for external platforms that have no live API
+ * wired up yet. Albums / Songs / Videos / Shorts are fetched live from the
+ * catalog (see fetchArtistCounts); these two are manual until an API is added.
+ * Set to null to render a "—" placeholder instead.
+ */
+export const ARTIST_SOCIAL_STATS: {
+  youtubeSubscribers: number | null;
+  spotifyMonthlyListeners: number | null;
+} = {
+  youtubeSubscribers: 1200,
+  spotifyMonthlyListeners: 3400,
+};
+
 export const GENRES = [
   "Cyberpunk",
   "Synthwave",
