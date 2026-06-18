@@ -1,11 +1,11 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Film, Music, Rocket, Users } from "lucide-react";
 import profileLogo from "@/assets/profile-neoshade.png.asset.json";
 import { ArtistStats } from "@/components/ArtistStats";
 
 type ArtistProfileCardProps = {
   className?: string;
-  /** Render the (future) live statistics strip beneath the profile. */
+  /** Render the live statistics strip beneath the profile. */
   showStats?: boolean;
 };
 
@@ -16,19 +16,35 @@ const NEOSHADE_AI_URL = "https://neoshadeai.com";
  * Surfaced on the homepage, album, playlist and video pages.
  */
 export function ArtistProfileCard({ className = "", showStats = false }: ArtistProfileCardProps) {
+  const navigate = useNavigate();
+
+  const followSocials = () => {
+    const el =
+      typeof document !== "undefined" ? document.getElementById("follow-the-signal") : null;
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Section lives on the homepage — go there and anchor to it.
+      navigate({ to: "/", hash: "follow-the-signal" });
+    }
+  };
+
   return (
     <div
       className={`glass overflow-hidden rounded-2xl border border-border/70 shadow-[var(--shadow-card)] ${className}`}
     >
       <div className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-8">
-        <img
-          src={profileLogo.url}
-          alt="Jonathan George — neoSHADE portrait"
-          width={96}
-          height={96}
-          loading="lazy"
-          className="h-20 w-20 shrink-0 rounded-2xl border border-neon-cyan/40 shadow-[var(--shadow-neon)] sm:h-24 sm:w-24"
-        />
+        <div className="relative shrink-0 self-center sm:self-auto">
+          <span className="absolute -inset-1 rounded-full bg-[var(--gradient-neon)] opacity-60 blur-md" />
+          <img
+            src={profileLogo.url}
+            alt="Jonathan George — neoSHADE logo"
+            width={104}
+            height={104}
+            loading="lazy"
+            className="relative h-24 w-24 rounded-full border-2 border-neon-cyan/60 object-cover shadow-[var(--shadow-neon)] sm:h-28 sm:w-28"
+          />
+        </div>
         <div className="min-w-0 flex-1">
           <h2 className="font-display text-2xl font-black">
             <span className="text-gradient">Jonathan George</span>{" "}
@@ -59,12 +75,13 @@ export function ArtistProfileCard({ className = "", showStats = false }: ArtistP
             >
               <Rocket className="h-4 w-4 text-accent" /> Visit neoSHADE AI
             </a>
-            <a
-              href="#follow-the-signal"
+            <button
+              type="button"
+              onClick={followSocials}
               className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-sm font-semibold backdrop-blur transition-colors hover:border-neon-violet"
             >
               <Users className="h-4 w-4" /> Follow Socials
-            </a>
+            </button>
           </div>
         </div>
       </div>
