@@ -175,6 +175,9 @@ function Index() {
         </div>
         {latest.isSuccess && !latest.data.length && <EmptyHint />}
       </Section>
+
+      {/* Follow the signal */}
+      <FollowTheSignal />
     </div>
   );
 }
