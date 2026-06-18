@@ -14,38 +14,28 @@ export const BRAND = {
 };
 
 /**
- * Editable placeholder figures for external platforms that have no live API
- * wired up yet. Albums / Songs / Videos / Shorts are fetched live from the
- * catalog (see fetchArtistCounts); these two are manual until an API is added.
- * Set to null to render a "—" placeholder instead.
- */
-export const ARTIST_SOCIAL_STATS: {
-  youtubeSubscribers: number | null;
-  spotifyMonthlyListeners: number | null;
-} = {
-  youtubeSubscribers: 12400,
-  spotifyMonthlyListeners: 45000,
-};
-
-/**
  * Display counts for the artist profile statistics row. These are the
  * public-facing figures shown on the card; live DB totals remain available via
  * fetchArtistCounts when an API connection is ready.
  */
 export const ARTIST_COUNTS: {
-  youtubeSubscribers: { value: number; mode: "compact" | "exact"; suffix: string };
-  spotifyMonthlyListeners: { value: number; mode: "compact" | "exact"; suffix: string };
-  albums: { value: number; mode: "compact" | "exact"; suffix: string };
-  songs: { value: number; mode: "compact" | "exact"; suffix: string };
-  videos: { value: number; mode: "compact" | "exact"; suffix: string };
-  shorts: { value: number; mode: "compact" | "exact"; suffix: string };
+  youtubeSubscribers: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  spotifyMonthlyListeners: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  totalViews: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  liveAlbums: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  backloggedAlbums: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  songs: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  videos: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
+  shorts: { value: number; mode: "compact" | "exact"; suffix: string; label: string };
 } = {
-  youtubeSubscribers: { value: 12400, mode: "compact", suffix: "" },
-  spotifyMonthlyListeners: { value: 45000, mode: "compact", suffix: "" },
-  albums: { value: 105, mode: "exact", suffix: "" },
-  songs: { value: 1900, mode: "exact", suffix: "+" },
-  videos: { value: 170, mode: "exact", suffix: "+" },
-  shorts: { value: 50, mode: "exact", suffix: "+" },
+  youtubeSubscribers: { value: 110, mode: "exact", suffix: "", label: "YouTube Subscribers" },
+  spotifyMonthlyListeners: { value: 27000, mode: "compact", suffix: "", label: "Monthly Listeners" },
+  totalViews: { value: 46000, mode: "compact", suffix: "", label: "Total Views" },
+  liveAlbums: { value: 70, mode: "exact", suffix: "", label: "Live Albums" },
+  backloggedAlbums: { value: 67, mode: "exact", suffix: "", label: "Backlogged Albums" },
+  songs: { value: 1200, mode: "exact", suffix: "+", label: "Total Songs" },
+  videos: { value: 170, mode: "exact", suffix: "+", label: "Videos" },
+  shorts: { value: 50, mode: "exact", suffix: "+", label: "Shorts" },
 };
 
 export const GENRES = [
