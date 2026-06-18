@@ -265,3 +265,91 @@
   0%, 100% { height: 30%; }
   50% { height: 100%; }
 }
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--neon-cyan) 35%, transparent),
+      0 0 12px -2px color-mix(in oklab, var(--neon-cyan) 45%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--neon-magenta) 50%, transparent),
+      0 0 26px -2px color-mix(in oklab, var(--neon-magenta) 60%, transparent);
+  }
+}
+
+@layer components {
+  /* Glassy neon chip used by the social dock & header icons */
+  .neo-social-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--neon-cyan) 30%, transparent);
+    background: color-mix(in oklab, var(--card) 60%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--foreground);
+    transition:
+      transform 0.25s ease,
+      color 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .neo-social-chip:hover {
+    transform: translateY(-2px) scale(1.08);
+    color: var(--neon-cyan);
+    border-color: color-mix(in oklab, var(--neon-cyan) 70%, transparent);
+    box-shadow:
+      0 0 18px -2px color-mix(in oklab, var(--neon-cyan) 60%, transparent),
+      0 0 36px -8px color-mix(in oklab, var(--neon-magenta) 45%, transparent);
+  }
+
+  /* Animated platform card for FOLLOW THE SIGNAL */
+  .neo-platform-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--border) 90%, transparent);
+    background: color-mix(in oklab, var(--card) 65%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .neo-platform-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: var(--gradient-neon);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    padding: 1px;
+    border-radius: inherit;
+  }
+  .neo-platform-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--neon-cyan) 55%, transparent);
+    box-shadow:
+      0 0 24px -6px color-mix(in oklab, var(--neon-cyan) 50%, transparent),
+      0 0 48px -16px color-mix(in oklab, var(--neon-magenta) 45%, transparent);
+  }
+  .neo-platform-card:hover::before {
+    opacity: 0.8;
+  }
+  .neo-platform-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .animate-neon-pulse {
+    animation: neon-pulse 2.6s ease-in-out infinite;
+  }
+}

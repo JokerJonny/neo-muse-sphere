@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { HeaderSocials } from "@/components/social/HeaderSocials";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -79,6 +80,10 @@ export function Header() {
             )}
           </Link>
 
+          <HeaderSocials className="mr-1 hidden xl:flex" />
+
+
+
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary">
@@ -145,6 +150,12 @@ export function Header() {
           >
             ← neo-shade.com
           </a>
+          <div className="mt-3 border-t border-border/60 pt-3">
+            <p className="mb-2 px-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Follow the signal
+            </p>
+            <HeaderSocials className="flex-wrap" />
+          </div>
           {!user && (
             <Link
               to="/auth"

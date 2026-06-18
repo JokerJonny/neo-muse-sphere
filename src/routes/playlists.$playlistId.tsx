@@ -5,6 +5,7 @@ import { usePlayer } from "@/hooks/use-player";
 import { fetchPlaylist, fetchPlaylistTracks } from "@/lib/queries";
 import { youtubeThumb, formatDuration, formatViews } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/playlists/$playlistId")({
@@ -144,6 +145,8 @@ function PlaylistDetail() {
           <p className="p-8 text-center text-sm text-muted-foreground">No videos in this playlist yet.</p>
         )}
       </div>
+
+      <ArtistProfileCard className="mt-12" />
     </div>
   );
 }

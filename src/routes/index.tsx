@@ -9,6 +9,8 @@ import { TrackCard } from "@/components/TrackCard";
 import { usePlayer } from "@/hooks/use-player";
 import { fetchLatestTracks, fetchVideos, fetchTrending } from "@/lib/queries";
 import { youtubeThumb, formatViews } from "@/lib/format";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
+import { FollowTheSignal } from "@/components/social/FollowTheSignal";
 import type { Track } from "@/lib/types";
 
 export const Route = createFileRoute("/")({
@@ -108,6 +110,13 @@ function Index() {
         </div>
       </section>
 
+      {/* Artist profile */}
+      <section className="mx-auto max-w-7xl px-4 py-6">
+        <ArtistProfileCard showStats />
+      </section>
+
+
+
       {/* Featured videos */}
       {!!featuredVideos.length && (
         <Section title="Featured Videos" href="/videos">
@@ -166,6 +175,9 @@ function Index() {
         </div>
         {latest.isSuccess && !latest.data.length && <EmptyHint />}
       </Section>
+
+      {/* Follow the signal */}
+      <FollowTheSignal />
     </div>
   );
 }
