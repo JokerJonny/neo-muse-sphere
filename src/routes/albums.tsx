@@ -8,6 +8,7 @@ import { fetchYouTubePlaylists, fetchPlaylistTracks } from "@/lib/queries";
 import { SyncReleasesButton } from "@/components/SyncReleasesButton";
 import type { YouTubePlaylist } from "@/lib/types";
 import { siteUrl } from "@/lib/site";
+import { ArtistProfileCard } from "@/components/ArtistProfileCard";
 
 export const Route = createFileRoute("/albums")({
   loader: () => fetchYouTubePlaylists(),
