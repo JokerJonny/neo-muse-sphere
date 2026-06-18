@@ -150,6 +150,12 @@ export function Header() {
           >
             ← neo-shade.com
           </a>
+          <div className="mt-3 border-t border-border/60 pt-3">
+            <p className="mb-2 px-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Follow the signal
+            </p>
+            <HeaderSocials className="flex-wrap" />
+          </div>
           {!user && (
             <Link
               to="/auth"
