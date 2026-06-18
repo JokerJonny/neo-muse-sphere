@@ -23,8 +23,29 @@ export const ARTIST_SOCIAL_STATS: {
   youtubeSubscribers: number | null;
   spotifyMonthlyListeners: number | null;
 } = {
-  youtubeSubscribers: 1200,
-  spotifyMonthlyListeners: 3400,
+  youtubeSubscribers: 12400,
+  spotifyMonthlyListeners: 45000,
+};
+
+/**
+ * Display counts for the artist profile statistics row. These are the
+ * public-facing figures shown on the card; live DB totals remain available via
+ * fetchArtistCounts when an API connection is ready.
+ */
+export const ARTIST_COUNTS: {
+  youtubeSubscribers: { value: number; mode: "compact" | "exact"; suffix: string };
+  spotifyMonthlyListeners: { value: number; mode: "compact" | "exact"; suffix: string };
+  albums: { value: number; mode: "compact" | "exact"; suffix: string };
+  songs: { value: number; mode: "compact" | "exact"; suffix: string };
+  videos: { value: number; mode: "compact" | "exact"; suffix: string };
+  shorts: { value: number; mode: "compact" | "exact"; suffix: string };
+} = {
+  youtubeSubscribers: { value: 12400, mode: "compact", suffix: "" },
+  spotifyMonthlyListeners: { value: 45000, mode: "compact", suffix: "" },
+  albums: { value: 105, mode: "exact", suffix: "" },
+  songs: { value: 1900, mode: "exact", suffix: "+" },
+  videos: { value: 170, mode: "exact", suffix: "+" },
+  shorts: { value: 50, mode: "exact", suffix: "+" },
 };
 
 export const GENRES = [

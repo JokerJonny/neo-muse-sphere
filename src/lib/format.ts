@@ -64,3 +64,9 @@ export function formatCompact(n?: number | null): string {
   if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1)}K`;
   return `${n}`;
 }
+
+/** Format an artist-stat number: compact (12.4K) or exact (1,900). */
+export function formatArtistStat(n: number, mode: "compact" | "exact" = "compact"): string {
+  if (mode === "exact") return new Intl.NumberFormat("en-US").format(n);
+  return formatCompact(n);
+}
